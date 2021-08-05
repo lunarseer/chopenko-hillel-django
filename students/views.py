@@ -1,11 +1,12 @@
 import random
 
 from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
 
 from faker import Faker
 
 from .models import Group, Student, Teacher
+from .forms import AddStudentForm, AddTeacherForm, AddGroupForm
 
 
 def validate_count(count):
@@ -21,6 +22,59 @@ def validate_count(count):
 
 
 # Create your views here.
+
+def index(request):
+    return render(request, 'index.html')
+
+
+def add_student(request):
+    if request.method == "POST":
+        form = AddStudentForm(request.POST)
+        if form.is_valid():
+            person = Student.objects.create(firstname=request.POST.get('firstname'),
+                                lastname=request.POST.get('lastname'),
+                                age=request.POST.get('age'))
+            return render(request, 'entity_responce.html', {'entity': person, 'oname':person.itemname()})
+    else:
+        form = AddStudentForm()
+    return render(request, 'add_student_form.html', {'form': form})
+
+def add_teacher(request):
+    if request.method == "POST":
+        form = AddTeacherForm(request.POST)
+        if form.is_valid():
+            person = Teacher.objects.create(firstname=request.POST.get('firstname'),
+                                lastname=request.POST.get('lastname'),
+                                age=request.POST.get('age'))
+            return render(request, 'entity_responce.html', {'entity': person, 'oname':person.itemname()})
+    else:
+        form = AddStudentForm()
+    return render(request, 'add_teacher_form.html', {'form': form})
+
+
+def add_group(request):
+    if not all([Student.objects.all(), Teacher.objects.all()]):
+        return HttpResponse("Add Students and Teachers first")
+    if request.method == "POST":
+        print(str(request.POST.get('teachers')))
+        form = AddGroupForm(
+            name=request.POST.get('name'),
+            students=[x for x in request.POST.get('students').items()],
+            teachers=request.POST.get('teachers'),
+            )
+        print(form.fields)
+        if form.is_valid():
+            group = Group.objects.create(name=request.POST.get('name'),
+                                students=request.POST.get('students'),
+                                teachers=request.POST.get('teachers'))
+            return render(request, 'entity_responce.html', {'entity': group, 'oname':group.itemname()})
+        else:
+            return HttpResponse('Invalid Form', form.fields)
+    else:
+        teachers = [(x.id, str(x)) for x in Teacher.objects.all()]
+        students = [(x.id, str(x)) for x in Student.objects.all()]
+        form = AddGroupForm(students=students, teachers=teachers)
+    return render(request, 'add_group_form.html', {'form': form})
 
 
 def get_students(request):
@@ -42,6 +96,7 @@ def get_teachers(request):
     return JsonResponse(status=200, data=response, safe=False)
 
 
+#DEPRECATED
 def generate_student(request):
     gen = Faker()
     stud = Student.objects.create(firstname=gen.first_name(),
@@ -50,12 +105,12 @@ def generate_student(request):
     return JsonResponse(status=200, data=[stud.values()], safe=False)
 
 
-@csrf_exempt    # CSRF TOKEN DECORATOR, I DUNNO BUT IT HELPS
+#DEPRECATED
 def generate_students(request):
     gen = Faker()
     if request.method != "POST":
         responce = "{} method not implemented".format(request.method)
-    if request.method == "POST":
+    else:
         count = validate_count(request.POST.get('count', 0))
         if count > 0:
             students = []
@@ -72,7 +127,7 @@ def generate_students(request):
     return JsonResponse(status=200, data=responce, safe=False)
 
 
-@csrf_exempt
+#DEPRECATED
 def generate_teachers(request):
     gen = Faker()
     if request.method != "POST":
@@ -92,7 +147,7 @@ def generate_teachers(request):
     return HttpResponse(responce)
 
 
-@csrf_exempt
+#DEPRECATED
 def generate_groups(request):
     if request.method != "POST":
         responce = "{} method not implemented".format(request.method)

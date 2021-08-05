@@ -19,6 +19,10 @@ from django.urls import path
 from students import views as stud
 
 urlpatterns = [
+    path('', stud.index),
+    path('add-student', stud.add_student),
+    path('add-teacher', stud.add_teacher),
+    path('add-group', stud.add_group),
     path('admin/', admin.site.urls),
     path('generate-student/', stud.generate_student),
     path('generate-students/', stud.generate_students),
