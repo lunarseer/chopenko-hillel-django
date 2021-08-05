@@ -7,8 +7,8 @@ source constants.sh
 
 #export DJANGO_SUPERUSER_PASSWORD=admin
 
-#python $PWD/manage.py makemigrations
-#python $PWD/manage.py migrate
+python $PWD/manage.py makemigrations
+python $PWD/manage.py migrate
 
 #python $PWD/manage.py createsuperuser --noinput --user admin --email mail@mail.com
 

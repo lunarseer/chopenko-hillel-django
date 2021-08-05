@@ -8,7 +8,7 @@ class PersonInGroupForm(forms.Form):
 
 class AddStudentForm(forms.Form):
     firstname = forms.CharField(label='First Name', max_length=30)
-    lastname = forms.CharField(label='First Name', max_length=30)
+    lastname = forms.CharField(label='Last Name', max_length=30)
     age = forms.IntegerField(label='Age',min_value=16, max_value=100)
 
 
@@ -18,11 +18,7 @@ class AddTeacherForm(AddStudentForm):
 
 class AddGroupForm(forms.Form):
 
-    def __init__(self, *args, **kwargs):
-        super(forms.Form, self).__init__()
-
-        self.fields['name'] = forms.CharField(max_length=30)
-        self.fields['students'] = forms.MultipleChoiceField(required=False,
-                                            choices=kwargs.get('students', []))
-        self.fields['teachers'] = forms.MultipleChoiceField(required=False,
-                                            choices=kwargs.get('teachers', []))
+    name = forms.CharField(max_length=30)
+    discipline = forms.CharField(max_length=30)
+    students = forms.JSONField(widget = forms.HiddenInput(), required=False)
+    teachers = forms.JSONField(widget = forms.HiddenInput(), required=False)

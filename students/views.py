@@ -56,24 +56,15 @@ def add_group(request):
     if not all([Student.objects.all(), Teacher.objects.all()]):
         return HttpResponse("Add Students and Teachers first")
     if request.method == "POST":
-        print(str(request.POST.get('teachers')))
-        form = AddGroupForm(
-            name=request.POST.get('name'),
-            students=[x for x in request.POST.get('students').items()],
-            teachers=request.POST.get('teachers'),
-            )
-        print(form.fields)
+        form = AddGroupForm(request.POST)
         if form.is_valid():
             group = Group.objects.create(name=request.POST.get('name'),
-                                students=request.POST.get('students'),
-                                teachers=request.POST.get('teachers'))
+                                discipline=request.POST.get('discipline'))
             return render(request, 'entity_responce.html', {'entity': group, 'oname':group.itemname()})
         else:
             return HttpResponse('Invalid Form', form.fields)
     else:
-        teachers = [(x.id, str(x)) for x in Teacher.objects.all()]
-        students = [(x.id, str(x)) for x in Student.objects.all()]
-        form = AddGroupForm(students=students, teachers=teachers)
+        form = AddGroupForm()
     return render(request, 'add_group_form.html', {'form': form})
 
 

@@ -28,9 +28,8 @@ class GenericPerson(GenericModel):
     age = models.IntegerField(default=16)
 
     def __str__(self):
-        return "{} {} - {} y.o.".format(self.firstname,
-                                        self.lastname,
-                                        self.age)
+        return "{} {}".format(self.firstname,
+                              self.lastname)
 
     class Meta:
         abstract = True
@@ -47,7 +46,7 @@ class Teacher(GenericPerson):
 class Group(GenericModel):
 
     name = models.CharField(max_length=30, default='unnamed group')
-
+    discipline = models.CharField(max_length=30, default='unnamed group')
     students = forms.JSONField()
     teachers = forms.JSONField()
 
