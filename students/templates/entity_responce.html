@@ -1,6 +1,11 @@
 <html lang="en">
     <head>
-        <h3>{{ oname }} {{ entity }} created - <a href="/">Back</a></h2>
+        <h3>{{ message }} - <a href="/">Back</a></h2>
+        <table>
+            {% for entity in entitylist %}
+                <p>Created - {{ entity }}</p>
+            {% endfor %}
+        </table>
     </head>
     <body>
         <p></p>

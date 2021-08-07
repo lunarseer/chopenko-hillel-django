@@ -46,7 +46,7 @@ class Teacher(GenericPerson):
 class Group(GenericModel):
 
     name = models.CharField(max_length=30, default='unnamed group')
-    discipline = models.CharField(max_length=30, default='unnamed group')
+    discipline = models.CharField(max_length=30, default='unnamed discipline')
     students = forms.JSONField()
     teachers = forms.JSONField()
 
