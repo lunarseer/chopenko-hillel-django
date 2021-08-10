@@ -1,9 +1,13 @@
 from django.db import models
+from django import forms
 
 # Create your models here.
 
 
 class GenericModel(models.Model):
+
+    def itemname(self):
+        return self.__class__.__name__
 
     def values(self):
         def valid(key):
@@ -24,9 +28,8 @@ class GenericPerson(GenericModel):
     age = models.IntegerField(default=16)
 
     def __str__(self):
-        return "{} {} - {} y.o.".format(self.firstname,
-                                        self.lastname,
-                                        self.age)
+        return "{} {}".format(self.firstname,
+                              self.lastname)
 
     class Meta:
         abstract = True
@@ -43,8 +46,9 @@ class Teacher(GenericPerson):
 class Group(GenericModel):
 
     name = models.CharField(max_length=30, default='unnamed group')
-    students = models.JSONField(default=list)
-    teachers = models.JSONField(default=list)
+    discipline = models.CharField(max_length=30, default='unnamed discipline')
+    students = forms.JSONField()
+    teachers = forms.JSONField()
 
     def __str__(self):
-        return "{} '{}'".format(self.__class__.__name__, self.name)
+        return "{} - {}".format(self.discipline, self.name)
