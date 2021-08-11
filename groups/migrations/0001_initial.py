@@ -12,12 +12,11 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Student',
+            name='Group',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('firstname', models.CharField(default='John', max_length=30)),
-                ('lastname', models.CharField(default='Doe', max_length=30)),
-                ('age', models.IntegerField(default=16)),
+                ('name', models.CharField(default='unnamed group', max_length=30)),
+                ('discipline', models.CharField(default='unnamed discipline', max_length=30)),
             ],
             options={
                 'abstract': False,

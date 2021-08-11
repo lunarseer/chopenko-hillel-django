@@ -1,5 +1,5 @@
 from common.forms import AddPersonForm
 
 
-class AddStudentForm(AddPersonForm):
+class AddTeacherForm(AddPersonForm):
     pass

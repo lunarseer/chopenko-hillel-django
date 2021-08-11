@@ -12,12 +12,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Student',
+            name='Teacher',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('firstname', models.CharField(default='John', max_length=30)),
                 ('lastname', models.CharField(default='Doe', max_length=30)),
                 ('age', models.IntegerField(default=16)),
+                ('dicsiplines', models.JSONField(default=list)),
             ],
             options={
                 'abstract': False,
