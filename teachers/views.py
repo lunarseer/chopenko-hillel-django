@@ -23,7 +23,6 @@ def edit_teacher(request, teacher_id):
     if request.method == "POST":
         form = TeacherFormFromModel(request.POST)
         if form.is_valid():
-            formdata = form.cleaned_data
             Teacher.objects.update_or_create(defaults=form.cleaned_data,
                                              id=teacher_id)
             return redirect('teachers-list')
