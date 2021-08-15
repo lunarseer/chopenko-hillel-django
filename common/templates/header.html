@@ -14,13 +14,13 @@
         <title>Hillel Django Project</title>
         <header class="header">
             <nav class="navbar navbar-expand-lg fixed-top" style="background-color:rgb(235, 235, 235)">
-                <div class="container"><a href="#" class="navbar-brand text-uppercase font-weight-bold">Home</a>
+                <div class="container"><a href="{% url 'home' %}" class="navbar-brand text-uppercase font-weight-bold">Home</a>
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item"><a href="#" class="nav-link text-uppercase font-weight-bold">Students</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link text-uppercase font-weight-bold">Teachers</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link text-uppercase font-weight-bold">Groups</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link text-uppercase font-weight-bold">Fake-Generator</a></li>
-                        <li class="nav-item"><a href="admin" class="nav-link text-uppercase font-weight-bold">Admin</a></li>
+                        <li class="nav-item"><a href="{% url 'students-list' %}" class="nav-link text-uppercase font-weight-bold">Students</a></li>
+                        <li class="nav-item"><a href="{% url 'teachers-list' %}" class="nav-link text-uppercase font-weight-bold">Teachers</a></li>
+                        <li class="nav-item"><a href="{% url 'groups-list' %}" class="nav-link text-uppercase font-weight-bold">Groups</a></li>
+                        <li class="nav-item"><a href="{% url 'fake-generator' %}" class="nav-link text-uppercase font-weight-bold">[Fake-Generator]</a></li>
+                        <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link text-uppercase font-weight-bold">[Django-Admin]</a></li>
                     </ul>
                 </div>
             </nav>

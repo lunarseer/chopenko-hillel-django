@@ -1,7 +1,7 @@
 import random
 from faker import Faker
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 
 from students.models import Student
@@ -14,12 +14,9 @@ from .forms import GeneratorCountForm
 def index(request):
     return render(request, 'index.html')
 
-def generate_student(request):
-    gen = Faker()
-    stud = Student.objects.create(firstname=gen.first_name(),
-                                  lastname=gen.last_name(),
-                                  age=random.randint(16, 52))
-    return JsonResponse(status=200, data=[stud.values()], safe=False)
+
+def fake_generator_page(request):
+    return render(request, 'fake_generator.html', {})
 
 
 def generate_students(request):
@@ -35,10 +32,7 @@ def generate_students(request):
                                age=random.randint(16, 52))
                 students.append(stud)
             Student.objects.bulk_create(students)
-            entitylist = [f'{x.firstname} {x.lastname}' for x in students]
-            data = {'message': f'{count} students created',
-                    'entitylist': entitylist}
-            return render(request, 'entity_responce.html', data)
+            return redirect('students-list')
     elif request.method == "GET":
         form = GeneratorCountForm()
         return render(request, 'generate_form.html',
@@ -58,10 +52,7 @@ def generate_teachers(request):
                                   age=random.randint(16, 52))
                 teachers.append(teacher)
             Teacher.objects.bulk_create(teachers)
-            entitylist = [f'{x.firstname} {x.lastname}' for x in teachers]
-            data = {'message': f'{count} students created',
-                    'entitylist': entitylist}
-            return render(request, 'entity_responce.html', data)
+            return redirect('teachers-list')
     elif request.method == "GET":
         form = GeneratorCountForm()
         return render(request, 'generate_form.html',
@@ -81,9 +72,7 @@ def generate_groups(request):
                 group = Group(name=f'{teacher.firstname}_group')
                 groups.append(group)
             Group.objects.bulk_create(groups)
-            data = {'message': f'{count} groups created',
-                    'entitylist': [f'{x.name}' for x in groups]}
-            return render(request, 'entity_responce.html', data)
+            return redirect('groups-list')
     elif request.method == "GET":
         form = GeneratorCountForm()
         return render(request, 'generate_form.html',

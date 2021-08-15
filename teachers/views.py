@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 
 from .models import Teacher
@@ -17,9 +17,7 @@ def add_teacher(request):
             person = Teacher.objects.create(firstname=formdata['firstname'],
                                             lastname=formdata['lastname'],
                                             age=formdata['age'])
-            entitylist = [f"{person.firstname} {person.lastname}"]
-            data = {'message': '1 teacher created', 'entitylist': entitylist}
-            return render(request, 'entity_responce.html', data)
+            return redirect('teachers-list')
     else:
         form = AddTeacherForm()
     return render(request, 'add_teacher_form.html', {'form': form})
@@ -32,3 +30,8 @@ def get_teachers(request):
     except Exception as e:
         return JsonResponse(status=404, data={"message": str(e)})
     return JsonResponse(status=200, data=response, safe=False)
+
+
+def get_teachers_list(request):
+    teachers = Teacher.objects.all()
+    return render(request, 'teachers.html', {'teachers': teachers})

@@ -1,5 +1,5 @@
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import Group
 from students.models import Student
@@ -19,10 +19,7 @@ def add_group(request):
             formdata = form.cleaned_data
             group = Group.objects.create(name=formdata['name'],
                                          discipline=formdata['discipline'])
-            data = {'message': '1 groups created', 'entitylist': [group.name]}
-            return render(request,
-                          'entity_responce.html',
-                          data)
+            return redirect('groups-list')
         else:
             return HttpResponse('Invalid Form', form.fields)
     else:
@@ -33,3 +30,8 @@ def add_group(request):
 def get_groups(request):
     response = [x.values() for x in Group.objects.all()]
     return JsonResponse(status=200, data=response, safe=False)
+
+
+def get_groups_list(request):
+    groups = Group.objects.all()
+    return render(request, 'groups.html', {'groups': groups})

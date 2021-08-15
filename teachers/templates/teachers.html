@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3 align="center">Teachers</h3>
+    <a href="{% url 'add-teacher' %}"><button>Add Teacher</button></a>
+    <p></p>
+    <ul>
+        {% for teacher in teachers %}
+        <li>
+            {{ teacher.id|safe }} {{ teacher|safe }}
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
