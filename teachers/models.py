@@ -5,4 +5,4 @@ from common.models import GenericPerson
 
 
 class Teacher(GenericPerson):
-    disciplines = models.JSONField(default=list)
+    disciplines = models.CharField(max_length=50, default='None')

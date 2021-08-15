@@ -1,12 +1,11 @@
-<html lang="en">
-<body>
+{% extends "base.html" %}
+{% block content %}
     <h3>Add Group to DB</h3>
-<form action="" method="post">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit">
-</form>
-</body>
-</html>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
