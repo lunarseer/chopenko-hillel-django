@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 
 from .models import Teacher
 
@@ -14,26 +14,24 @@ def teachers_list(request):
     return render(request, 'teachers.html', {'teachers': teachers})
 
 
-def get_teacher(request):
-    query = {q: v for q, v in request.GET.items()}
-    try:
-        response = [x.values() for x in Teacher.objects.filter(**query)]
-    except Exception as e:
-        return JsonResponse(status=404, data={"message": str(e)})
-    return JsonResponse(status=200, data=response, safe=False)
+def get_teacher(request, teacher_id):
+    student = Teacher.objects.get(id=teacher_id)
+    return HttpResponse(status=200, content=student)
 
 
 def edit_teacher(request, teacher_id):
     if request.method == "POST":
         form = TeacherFormFromModel(request.POST)
         if form.is_valid():
-            Teacher.objects.update_or_create(defaults=form.cleaned_data, id=teacher_id)
+            Teacher.objects.update_or_create(defaults=form.cleaned_data,
+                                             id=teacher_id)
             return redirect('teachers-list')
     else:
-        
         teacher = Teacher.objects.get(id=teacher_id)
         form = TeacherFormFromModel(instance=teacher)
-        return render(request, 'edit_teacher_form.html', {'form': form, 'teacher_id': teacher_id})
+        return render(request,
+                      'edit_teacher_form.html',
+                      {'form': form, 'teacher_id': teacher_id})
 
 
 def add_teacher(request):
@@ -41,9 +39,9 @@ def add_teacher(request):
         form = AddTeacherForm(request.POST)
         if form.is_valid():
             formdata = form.cleaned_data
-            person = Teacher.objects.create(firstname=formdata['firstname'],
-                                            lastname=formdata['lastname'],
-                                            age=formdata['age'])
+            Teacher.objects.create(firstname=formdata['firstname'],
+                                   lastname=formdata['lastname'],
+                                   age=formdata['age'])
             return redirect('teachers-list')
     else:
         form = AddTeacherForm()
@@ -51,6 +49,6 @@ def add_teacher(request):
 
 
 def delete_teacher(request, teacher_id):
-    pass
-
-
+    teacher = Teacher.objects.get(id=teacher_id)
+    teacher.delete()
+    return redirect('teachers-list')

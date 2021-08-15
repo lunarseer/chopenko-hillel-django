@@ -13,5 +13,7 @@ urlpatterns = [
     path('add_teacher/', add_teacher, name='add-teacher'),
     path('get_teacher/<int:teacher_id>', get_teacher, name='get-teacher'),
     path('edit_teacher/<int:teacher_id>', edit_teacher, name='edit-teacher'),
-    path('delete_teacher/<int:teacher_id>', delete_teacher, name='delete-teacher'),
+    path('delete_teacher/<int:teacher_id>',
+         delete_teacher,
+         name='delete-teacher'),
 ]

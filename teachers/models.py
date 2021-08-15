@@ -5,6 +5,4 @@ from common.models import GenericPerson
 
 
 class Teacher(GenericPerson):
-    dicsiplines = models.JSONField(default=list)
-
-
+    disciplines = models.JSONField(default=list)

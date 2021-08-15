@@ -2,7 +2,6 @@ import random
 from faker import Faker
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
 
 from students.models import Student
 from teachers.models import Teacher

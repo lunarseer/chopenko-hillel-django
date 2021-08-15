@@ -14,5 +14,7 @@ urlpatterns = [
     path('add_student/', add_student, name='add-student'),
     path('get_student/<int:student_id>', get_student, name='get-student'),
     path('edit_student/<int:student_id>', edit_student, name='edit-student'),
-    path('delete_student/<int:student_id>', delete_student, name='delete-student'),
+    path('delete_student/<int:student_id>',
+         delete_student,
+         name='delete-student'),
 ]
