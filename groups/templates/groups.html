@@ -7,6 +7,8 @@
         {% for group in groups %}
         <li>
             {{ group.id|safe }} {{ group|safe }}
+            <a href="/edit_group/{{ group.id }}">Edit</a>
+            <a href="/delete_group/{{ group.id }}">Delete</a>
         </li>
         {% endfor %}
     </ul>

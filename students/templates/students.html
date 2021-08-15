@@ -8,7 +8,7 @@
         <li>
             {{ student.id|safe }} {{ student|safe }}
             <a href="/edit_student/{{ student.id }}">Edit</a>
-            <a href="/add_student/{{ student.id }}">Delete</a>
+            <a href="/delete_student/{{ student.id }}">Delete</a>
         </li>
         {% endfor %}
     </ul>

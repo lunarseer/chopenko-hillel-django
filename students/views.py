@@ -47,5 +47,5 @@ def add_student(request):
     return render(request, 'add_student_form.html', {'form': form})
 
 
-
-
+def delete_student(request, student_id):
+    pass

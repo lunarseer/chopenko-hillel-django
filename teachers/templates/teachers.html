@@ -7,6 +7,8 @@
         {% for teacher in teachers %}
         <li>
             {{ teacher.id|safe }} {{ teacher|safe }}
+            <a href="/edit_teacher/{{ teacher.id }}">Edit</a>
+            <a href="/delete_teacher/{{ teacher.id }}">Delete</a>
         </li>
         {% endfor %}
     </ul>
