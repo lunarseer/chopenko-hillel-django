@@ -1,15 +1,15 @@
 from django.urls import path
 
 from .views import (index,
-                    generate_student,
+                    fake_generator_page,
                     generate_students,
                     generate_teachers,
                     generate_groups)
 
 urlpatterns = [
-    path('', index),
-    path('generate_student', generate_student),
-    path('generate_students', generate_students),
-    path('generate_teachers', generate_teachers),
-    path('generate_groups', generate_groups),
+    path('', index, name='home'),
+    path('fake_generator/', fake_generator_page, name='fake-generator'),
+    path('generate_students/', generate_students, name='generate-students'),
+    path('generate_teachers/', generate_teachers, name='generate-teachers'),
+    path('generate_groups/', generate_groups, name='generate-groups'),
 ]

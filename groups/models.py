@@ -12,4 +12,4 @@ class Group(GenericModel):
     teachers = forms.JSONField()
 
     def __str__(self):
-        return "{} - {}".format(self.discipline, self.name)
+        return "{} - {}".format(self.name, self.discipline)
