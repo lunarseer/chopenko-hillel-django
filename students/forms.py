@@ -10,4 +10,4 @@ class AddStudentForm(AddPersonForm):
 class StudentFormFromModel(ModelForm):
     class Meta:
         model = Student
-        fields = ['firstname', 'lastname', 'age']
+        fields = ['firstname', 'lastname', 'age', 'phone']

@@ -40,9 +40,7 @@ def add_student(request):
         form = AddStudentForm(request.POST)
         if form.is_valid():
             formdata = form.cleaned_data
-            Student.objects.create(firstname=formdata['firstname'],
-                                   lastname=formdata['lastname'],
-                                   age=formdata['age'])
+            Student.objects.create(**formdata)
             return redirect('students-list')
     else:
         form = AddStudentForm()

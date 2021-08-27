@@ -39,9 +39,7 @@ def add_teacher(request):
         form = AddTeacherForm(request.POST)
         if form.is_valid():
             formdata = form.cleaned_data
-            Teacher.objects.create(firstname=formdata['firstname'],
-                                   lastname=formdata['lastname'],
-                                   age=formdata['age'])
+            Teacher.objects.create(**formdata)
             return redirect('teachers-list')
     else:
         form = AddTeacherForm()

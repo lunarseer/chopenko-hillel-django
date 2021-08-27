@@ -11,4 +11,4 @@ class AddTeacherForm(AddPersonForm):
 class TeacherFormFromModel(ModelForm):
     class Meta:
         model = Teacher
-        fields = ['firstname', 'lastname', 'age', 'disciplines']
+        fields = ['firstname', 'lastname', 'age', 'phone', 'disciplines']
