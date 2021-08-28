@@ -4,17 +4,18 @@ import re
 
 from students.views import add_student, edit_student
 from teachers.views import add_teacher, edit_teacher
+from .models import LogRecord
 
 
-PHONE_FIELDS = [add_teacher,
-                edit_teacher,
-                add_student,
-                edit_student
+PHONE_FORMS = [add_teacher,
+               edit_teacher,
+               add_student,
+               edit_student
                ]
 
 
 class TestMiddleware:
-    
+
     def __init__(self, get_responce) -> None:
         self.get_responce = get_responce
 
@@ -27,11 +28,9 @@ class TestMiddleware:
 
 # NOT USED
 class PhoneFieldFormatterMiddleware:
-
     """
     formatter for phone number field for addperson & editperson fields
     """
-    
     def __init__(self, get_responce) -> None:
         self.get_responce = get_responce
 
@@ -40,16 +39,14 @@ class PhoneFieldFormatterMiddleware:
         return responce
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        if view_func in PHONE_FIELDS and request.method == 'POST' and \
-            (phone := request.POST.get('phone')):
+        if view_func in PHONE_FORMS and request.method == 'POST':
+            phone = request.POST.get('phone')
             post = request.POST.copy()
             post['phone'] = phone.strip('')
             print('phone number formatted')
 
 
-
 class AdminLogMiddleware:
-
     """
     writes log to database
     request.path
@@ -64,7 +61,8 @@ class AdminLogMiddleware:
         responce = self.get_responce(request)
         elapsed_time = time() - start_time
         if re.search('admin', request.path):
-            print(f'request path: {request.path}')
-            print(f'request method: {request.method}')
-            print(f'total time: {elapsed_time}')
+            LogRecord.objects.create(path=request.path,
+                                     method=request.method,
+                                     execution_time=elapsed_time
+                                     )
         return responce
