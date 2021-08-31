@@ -19,6 +19,12 @@ def get_student(request, student_id):
 
 
 def edit_student(request, student_id):
+
+    def render_edit_form(form):
+        return render(request,
+                      'edit_student_form.html',
+                      {'form': form, 'student_id': student_id})
+
     if request.method == "POST":
         form = StudentFormFromModel(request.POST)
         if form.is_valid():
@@ -26,13 +32,13 @@ def edit_student(request, student_id):
                                              defaults=form.cleaned_data,
                                              id=student_id)
             return redirect('students-list')
+        else:
+            return render_edit_form(form)
+
     else:
         student = Student.objects.get(id=student_id)
         form = StudentFormFromModel(instance=student)
-        return render(
-                      request,
-                      'edit_student_form.html',
-                      {'form': form, 'student_id': student_id})
+        return render_edit_form(form)
 
 
 def add_student(request):
@@ -40,9 +46,7 @@ def add_student(request):
         form = AddStudentForm(request.POST)
         if form.is_valid():
             formdata = form.cleaned_data
-            Student.objects.create(firstname=formdata['firstname'],
-                                   lastname=formdata['lastname'],
-                                   age=formdata['age'])
+            Student.objects.create(**formdata)
             return redirect('students-list')
     else:
         form = AddStudentForm()

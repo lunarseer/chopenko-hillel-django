@@ -20,18 +20,24 @@ def get_teacher(request, teacher_id):
 
 
 def edit_teacher(request, teacher_id):
+
+    def render_edit_form(form):
+        return render(request,
+                      'edit_teacher_form.html',
+                      {'form': form, 'teacher_id': teacher_id})
+
     if request.method == "POST":
         form = TeacherFormFromModel(request.POST)
         if form.is_valid():
             Teacher.objects.update_or_create(defaults=form.cleaned_data,
                                              id=teacher_id)
             return redirect('teachers-list')
+        else:
+            return render_edit_form(form)
     else:
         teacher = Teacher.objects.get(id=teacher_id)
         form = TeacherFormFromModel(instance=teacher)
-        return render(request,
-                      'edit_teacher_form.html',
-                      {'form': form, 'teacher_id': teacher_id})
+        return render_edit_form(form)
 
 
 def add_teacher(request):
@@ -39,9 +45,7 @@ def add_teacher(request):
         form = AddTeacherForm(request.POST)
         if form.is_valid():
             formdata = form.cleaned_data
-            Teacher.objects.create(firstname=formdata['firstname'],
-                                   lastname=formdata['lastname'],
-                                   age=formdata['age'])
+            Teacher.objects.create(**formdata)
             return redirect('teachers-list')
     else:
         form = AddTeacherForm()
