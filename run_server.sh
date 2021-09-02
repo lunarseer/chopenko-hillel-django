@@ -1,7 +1,7 @@
 #!/bin/bash
 pip install -r $PWD/requirements.txt
 
-source constants.sh
+# source constants.sh
 
 # flake8
 

@@ -12,9 +12,23 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from os import getenv, path
+from dotenv import load_dotenv
+from celery.schedules import crontab
+
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+CELERY_BROKER_URL = 'pyamqp://guest@localhost'
+
+CELERY_BEAT_SCHEDULE = {
+    'beat': {
+        'task': 'common.tasks.clean_admin_logs',
+        'schedule': 10,
+    }
+}
 
 
 # Quick-start development settings - unsuitable for production
