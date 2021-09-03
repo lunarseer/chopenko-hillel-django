@@ -1,10 +1,6 @@
 #!/bin/bash
 pip install -r $PWD/requirements.txt
 
-# source constants.sh
-
-# flake8
-
 export DJANGO_SUPERUSER_PASSWORD=admin
 
 python $PWD/manage.py makemigrations

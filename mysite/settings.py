@@ -26,7 +26,7 @@ CELERY_BROKER_URL = 'pyamqp://guest@localhost'
 CELERY_BEAT_SCHEDULE = {
     'beat': {
         'task': 'common.tasks.clean_admin_logs',
-        'schedule': 10,
+        'schedule': 60,
     }
 }
 
