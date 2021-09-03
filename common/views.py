@@ -7,7 +7,8 @@ from students.models import Student
 from teachers.models import Teacher
 from groups.models import Group
 
-from .forms import GeneratorCountForm
+from .forms import GeneratorCountForm, ContactForm
+from .tasks import send_mail_message
 
 
 def index(request):
@@ -16,6 +17,25 @@ def index(request):
 
 def fake_generator_page(request):
     return render(request, 'fake_generator.html', {})
+
+
+def contact_us(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            send_to = ['potworko@gmail.com']
+            subject = form.cleaned_data.get('subject')
+            send_from = form.cleaned_data.get('send_from')
+            message = form.cleaned_data.get('message')
+            send_mail_message.delay(send_to=send_to,
+                                    subject=subject,
+                                    send_from=send_from,
+                                    message=message)
+            return redirect('home')
+    elif request.method == "GET":
+        form = ContactForm()
+        return render(request, 'contact_us.html',
+                      {'form': form, 'entitytype': 'students'})
 
 
 def generate_students(request):
