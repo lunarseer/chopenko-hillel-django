@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-    <h3 align="center">Teachers</h3>
-    <a href="{% url 'add-teacher' %}"><button>Add Teacher</button></a>
+    <h5 align="left">Teachers <a href="{% url 'add-teacher' %}"><button>Add</button></a></h5>
+    
     <p></p>
     <ul>
         {% for teacher in teachers %}

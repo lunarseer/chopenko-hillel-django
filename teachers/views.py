@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib import messages
 
 from .models import Teacher
 
@@ -31,6 +32,11 @@ def edit_teacher(request, teacher_id):
         if form.is_valid():
             Teacher.objects.update_or_create(defaults=form.cleaned_data,
                                              id=teacher_id)
+            firstname = form.cleaned_data.get('firstname')
+            lastname = form.cleaned_data.get('lastname')
+            name = f'{firstname} {lastname}'
+
+            messages.success(request, f'Teacher {name} saved')
             return redirect('teachers-list')
         else:
             return render_edit_form(form)
@@ -54,5 +60,7 @@ def add_teacher(request):
 
 def delete_teacher(request, teacher_id):
     teacher = Teacher.objects.get(id=teacher_id)
+    name = f'{teacher.firstname} {teacher.lastname}'
+    messages.success(request, f'Teacher {name} Deleted')
     teacher.delete()
     return redirect('teachers-list')

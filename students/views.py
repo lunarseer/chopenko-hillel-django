@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from .models import Student
 from .forms import AddStudentForm, StudentFormFromModel
@@ -31,6 +32,12 @@ def edit_student(request, student_id):
             Student.objects.update_or_create(
                                              defaults=form.cleaned_data,
                                              id=student_id)
+
+            firstname = form.cleaned_data.get('firstname')
+            lastname = form.cleaned_data.get('lastname')
+            name = f'{firstname} {lastname}'
+
+            messages.success(request, f'Student {name} saved')
             return redirect('students-list')
         else:
             return render_edit_form(form)
@@ -46,7 +53,10 @@ def add_student(request):
         form = AddStudentForm(request.POST)
         if form.is_valid():
             formdata = form.cleaned_data
-            Student.objects.create(**formdata)
+            student = Student.objects.create(**formdata)
+            name = f'{student.firstname} {student.lastname}'
+
+            messages.success(request, f'Student {name} Added')
             return redirect('students-list')
     else:
         form = AddStudentForm()
@@ -55,5 +65,7 @@ def add_student(request):
 
 def delete_student(request, student_id):
     student = Student.objects.get(id=student_id)
+    name = f'{student.firstname} {student.lastname}'
     student.delete()
+    messages.success(request, f'Student {name} Deleted')
     return redirect('students-list')
