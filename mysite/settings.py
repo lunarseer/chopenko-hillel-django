@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 CELERY_BROKER_URL = 'pyamqp://guest@localhost'
 
 CELERY_BEAT_SCHEDULE = {
-    'beat': {
+    'daily_clear_admin_logs': {
         'task': 'common.tasks.clean_admin_logs',
-        'schedule': 60,
+        'schedule': crontab(hour=0,minute=0),
     }
 }
 
@@ -36,7 +36,6 @@ CELERY_BEAT_SCHEDULE = {
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = getenv('DJANGO_SECRET_KEY')
-# SECRET_KEY = "django-insecure-9$6z@vjj&8k8z9fr=d0@iahfkcgcxw^9l+0eicd5y$e@1my^$p"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

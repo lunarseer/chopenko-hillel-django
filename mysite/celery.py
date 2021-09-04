@@ -9,12 +9,4 @@ app = Celery('my_celery')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
-# app.conf.beat_schedule = {
-#     'beat-every-day': {
-#         'task': 'common.tasks.clean_admin_logs',
-#         'schedule': 30.0,
-#         'args': (16, 16)
-#     }
-# }
-
-# app.conf.timezone = 'UTC'
+app.conf.timezone = 'Europe/Kiev'
