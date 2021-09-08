@@ -26,7 +26,6 @@ def contact_us(request):
         if form.is_valid():
             send_to = [
                 'lunarseer.test@gmail.com',
-                'vitalik1996@gmail.com'
                 ]
             subject = form.cleaned_data.get('subject')
             send_from = form.cleaned_data.get('send_from')
@@ -90,12 +89,16 @@ def generate_groups(request):
         form = GeneratorCountForm(request.POST)
         if form.is_valid():
             teachers = Teacher.objects.all()
+            students = Student.objects.all()
             num_teachers = len(teachers)
+            num_students = len(students)
             count = form.cleaned_data.get('count')
             groups = []
             for _ in range(count):
                 teacher = teachers[int(random.randrange(0, num_teachers))]
-                group = Group(name=f'{teacher.firstname}_group')
+                headman = students[int(random.randrange(0, num_students))]
+                print(teacher, headman)
+                group = Group(name=f'{teacher.firstname}_group', teacher=teacher, headman=headman)
                 groups.append(group)
             Group.objects.bulk_create(groups)
             messages.success(request, f'{len(groups)} Groups Generated.')

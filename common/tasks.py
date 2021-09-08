@@ -3,9 +3,12 @@ from django.core.mail import send_mail
 
 from celery import shared_task
 
-from .models import LogRecord
+from .models import LogRecord, MonoCurrency, NbuCurrency
 
 from datetime import timedelta
+
+
+
 
 
 @shared_task
@@ -16,6 +19,11 @@ def clean_admin_logs():
                                     path__contains='admin')
     print('{} admin logs deleted'.format(len(logs)))
     logs.delete()
+
+
+@shared_task
+def store_currencies():
+    pass
 
 
 @shared_task

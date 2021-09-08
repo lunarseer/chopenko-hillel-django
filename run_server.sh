@@ -9,4 +9,5 @@ python $PWD/manage.py migrate --run-syncdb
 
 python $PWD/manage.py createsuperuser --noinput --user admin --email mail@mail.com
 
-python $PWD/manage.py runserver & source start_rabbitmq.sh
+python $PWD/manage.py runserver 
+# source start_rabbitmq.sh
