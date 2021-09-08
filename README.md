@@ -3,7 +3,7 @@
 
 USAGE
 
-- if exixsts, please remove old project and clone again, or remove db.sqlite3 and migrations
+- if exists, please remove old project and clone again, or remove db.sqlite3 and migrations
 
 - create and activate virtualenv
    

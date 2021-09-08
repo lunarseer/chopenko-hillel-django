@@ -15,10 +15,16 @@ class GroupAdmin(admin.ModelAdmin):
 
     def link_to_teacher(self, obj):
         link = reverse("admin:teachers_teacher_change", args=[obj.teacher.id])
-        return format_html('<a href="{}">{} {}</a>', link, obj.teacher.firstname, obj.teacher.lastname)
+        return format_html('<a href="{}">{} {}</a>',
+                           link,
+                           obj.teacher.firstname,
+                           obj.teacher.lastname)
     link_to_teacher.short_description = 'Edit teacher'
 
     def link_to_headman(self, obj):
         link = reverse("admin:students_student_change", args=[obj.headman.id])
-        return format_html('<a href="{}">{} {}</a>', link, obj.headman.firstname, obj.headman.lastname)
+        return format_html('<a href="{}">{} {}</a>',
+                           link,
+                           obj.headman.firstname,
+                           obj.headman.lastname)
     link_to_headman.short_description = 'Edit headman'

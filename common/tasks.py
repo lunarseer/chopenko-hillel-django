@@ -1,14 +1,12 @@
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.core.management import call_command
 
 from celery import shared_task
 
-from .models import LogRecord, MonoCurrency, NbuCurrency
+from .models import LogRecord
 
 from datetime import timedelta
-
-
-
 
 
 @shared_task
@@ -23,7 +21,7 @@ def clean_admin_logs():
 
 @shared_task
 def store_currencies():
-    pass
+    call_command('get_currencies')
 
 
 @shared_task

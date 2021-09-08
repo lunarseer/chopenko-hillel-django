@@ -1,4 +1,5 @@
 from random import randrange
+from .utils import random_phone_number
 
 from django.core.management.base import BaseCommand
 
@@ -19,7 +20,9 @@ class Command(BaseCommand):
             gen = Faker()
             students = []
             for _ in range(count):
-                student = Student.objects.create(firstname=gen.first_name(),
-                                                 lastname=gen.last_name(),
-                                                 age=randrange(16, 50))
+                student = Student(firstname=gen.first_name(),
+                                  lastname=gen.last_name(),
+                                  age=randrange(16, 50),
+                                  phone=random_phone_number())
                 students.append(student)
+            Student.objects.bulk_create(students)

@@ -1,12 +1,7 @@
-import random
-from faker import Faker
+from django.core.management import call_command
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-
-from students.models import Student
-from teachers.models import Teacher
-from groups.models import Group
 
 from .forms import GeneratorCountForm, ContactForm
 from .tasks import send_mail_message
@@ -46,16 +41,9 @@ def generate_students(request):
     if request.method == "POST":
         form = GeneratorCountForm(request.POST)
         if form.is_valid():
-            students = []
             count = form.cleaned_data.get('count')
-            gen = Faker()
-            for _ in range(count):
-                stud = Student(firstname=gen.first_name(),
-                               lastname=gen.last_name(),
-                               age=random.randint(16, 52))
-                students.append(stud)
-            Student.objects.bulk_create(students)
-            messages.success(request, f'{len(students)} Students Generated.')
+            call_command('generate_students', count=count)
+            messages.success(request, f'{count} Students Generated.')
             return redirect('students-list')
     elif request.method == "GET":
         form = GeneratorCountForm()
@@ -67,16 +55,10 @@ def generate_teachers(request):
     if request.method == "POST":
         form = GeneratorCountForm(request.POST)
         if form.is_valid():
-            teachers = []
             count = form.cleaned_data.get('count')
-            gen = Faker()
-            for _ in range(count):
-                teacher = Teacher(firstname=gen.first_name(),
-                                  lastname=gen.last_name(),
-                                  age=random.randint(16, 52))
-                teachers.append(teacher)
-            Teacher.objects.bulk_create(teachers)
-            messages.success(request, f'{len(teachers)} Teachers Generated.')
+            call_command('generate_teachers', count=count)
+            messages.success(request,
+                             f'{count} Teachers and Groups Generated.')
             return redirect('teachers-list')
     elif request.method == "GET":
         form = GeneratorCountForm()
@@ -88,20 +70,9 @@ def generate_groups(request):
     if request.method == "POST":
         form = GeneratorCountForm(request.POST)
         if form.is_valid():
-            teachers = Teacher.objects.all()
-            students = Student.objects.all()
-            num_teachers = len(teachers)
-            num_students = len(students)
             count = form.cleaned_data.get('count')
-            groups = []
-            for _ in range(count):
-                teacher = teachers[int(random.randrange(0, num_teachers))]
-                headman = students[int(random.randrange(0, num_students))]
-                print(teacher, headman)
-                group = Group(name=f'{teacher.firstname}_group', teacher=teacher, headman=headman)
-                groups.append(group)
-            Group.objects.bulk_create(groups)
-            messages.success(request, f'{len(groups)} Groups Generated.')
+            call_command('generate_groups', count=count)
+            messages.success(request, f'{count} Groups Generated.')
             return redirect('groups-list')
     elif request.method == "GET":
         form = GeneratorCountForm()
