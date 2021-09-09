@@ -3,13 +3,19 @@
     <h5 align="left">Teachers <a href="{% url 'add-teacher' %}"><button>Add</button></a></h5>
     
     <p></p>
-    <ul>
+    <table align="center" cellpadding="2"  width="40%">
+        <tr>
+            <th>ID</th>
+            <th>Full name</th>
+            <th>Actions</th>
+        </tr>
+
         {% for teacher in teachers %}
-        <li>
-            {{ teacher.id|safe }} {{ teacher|safe }}
-            <a href="/edit_teacher/{{ teacher.id }}">Edit</a>
-            <a href="/delete_teacher/{{ teacher.id }}">Delete</a>
-        </li>
+        <tr>
+            <td>{{ teacher.id|safe }}</td>
+            <td>{{ teacher|safe }}</td>
+            <td><a href="/edit_teacher/{{ teacher.id }}">Edit</a> <a href="/delete_teacher/{{ teacher.id }}">Delete</a></td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% endblock %}

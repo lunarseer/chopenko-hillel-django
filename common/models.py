@@ -36,5 +36,24 @@ class GenericPerson(GenericModel):
         return "{} {}".format(self.firstname,
                               self.lastname)
 
+    @property
+    def fullname(self):
+        return str(self)
+
     class Meta:
         abstract = True
+
+
+class CurrencyStamp(models.Model):
+
+    rate_usd = models.DecimalField(max_digits=10, decimal_places=4)
+    rate_eur = models.DecimalField(max_digits=10, decimal_places=4)
+    created = models.DateTimeField(auto_now_add=True)
+
+
+class MonoCurrency(CurrencyStamp):
+    pass
+
+
+class NbuCurrency(CurrencyStamp):
+    pass

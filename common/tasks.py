@@ -1,5 +1,6 @@
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.core.management import call_command
 
 from celery import shared_task
 
@@ -16,6 +17,11 @@ def clean_admin_logs():
                                     path__contains='admin')
     print('{} admin logs deleted'.format(len(logs)))
     logs.delete()
+
+
+@shared_task
+def store_currencies():
+    call_command('get_currencies')
 
 
 @shared_task

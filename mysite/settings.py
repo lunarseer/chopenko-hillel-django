@@ -27,6 +27,10 @@ CELERY_BEAT_SCHEDULE = {
     'daily_clear_admin_logs': {
         'task': 'common.tasks.clean_admin_logs',
         'schedule': crontab(hour=0,minute=0),
+    },
+    'daily_store_currencies': {
+        'task': 'common.tasks.store_currencies',
+        'schedule': crontab(hour=12,minute=0),
     }
 }
 

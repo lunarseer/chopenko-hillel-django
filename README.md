@@ -3,6 +3,8 @@
 
 USAGE
 
+- if exists, please remove old project and clone again, or remove db.sqlite3 and migrations
+
 - create and activate virtualenv
    
 - start run_server.sh in root folder (Rabbit-MQ starting using docker container)
