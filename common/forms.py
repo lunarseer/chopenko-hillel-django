@@ -13,3 +13,11 @@ class AddPersonForm(forms.Form):
     phone = forms.CharField(label='Phone',
                             validators=[phone_validator],
                             required=False)
+
+
+class ContactForm(forms.Form):
+    send_from = forms.CharField(label='From', max_length=100)
+    subject = forms.CharField(label='Subject', max_length=200)
+    message = forms.CharField(label='Message',
+                              max_length=200,
+                              widget=forms.Textarea)

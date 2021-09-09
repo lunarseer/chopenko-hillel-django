@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <h3 align="center">Groups</h3>
-    <a href="{% url 'add-group' %}"><button>Add Group</button></a>
+    <h5 align="left">Groups <a href="{% url 'add-group' %}"><button>Add</button></a></h5>
     <p></p>
     <ul>
         {% for group in groups %}

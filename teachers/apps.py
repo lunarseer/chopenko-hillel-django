@@ -6,4 +6,4 @@ class TeachersConfig(AppConfig):
     name = 'teachers'
 
     def ready(self) -> None:
-        from common.handlers import firstname_lastname_edit_handler
+        from common.handlers import firstname_lastname_edit_handler     # noqa: E501,F401

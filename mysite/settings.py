@@ -12,9 +12,23 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from os import getenv, path
+from dotenv import load_dotenv
+from celery.schedules import crontab
+
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+CELERY_BROKER_URL = 'pyamqp://guest@localhost'
+
+CELERY_BEAT_SCHEDULE = {
+    'daily_clear_admin_logs': {
+        'task': 'common.tasks.clean_admin_logs',
+        'schedule': crontab(hour=0,minute=0),
+    }
+}
 
 
 # Quick-start development settings - unsuitable for production
@@ -22,15 +36,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = getenv('DJANGO_SECRET_KEY')
-# SECRET_KEY = "django-insecure-9$6z@vjj&8k8z9fr=d0@iahfkcgcxw^9l+0eicd5y$e@1my^$p"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CSRF_COOKIE_SECURE = False
+# CSRF_COOKIE_SECURE = False
 
+"""
+    SMTP username: Your Gmail address.
+    SMTP password: Your Gmail password.
+    SMTP server address: smtp.gmail.com.
+    Gmail SMTP port (TLS): 587.
+    SMTP port (SSL): 465.
+    SMTP TLS/SSL required: yes.
+"""
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
 # Application definition
 
 INSTALLED_APPS = [

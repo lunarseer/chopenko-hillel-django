@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from .models import Group
 from students.models import Student
@@ -28,8 +29,10 @@ def add_group(request):
         form = AddGroupForm(request.POST)
         if form.is_valid():
             formdata = form.cleaned_data
-            Group.objects.create(name=formdata['name'],
+            group_name = formdata['name']
+            Group.objects.create(name=group_name,
                                  discipline=formdata['discipline'])
+            messages.success(request, f'Group {group_name} added')
             return redirect('groups-list')
         else:
             return HttpResponse('Invalid Form', form.fields)
@@ -45,6 +48,8 @@ def edit_group(request, group_id):
             Group.objects.update_or_create(
                                            defaults=form.cleaned_data,
                                            id=group_id)
+            name = form.cleaned_data.get('name', '')
+            messages.success(request, f'Group {name} Saved')
             return redirect('groups-list')
     else:
         group = Group.objects.get(id=group_id)
@@ -57,5 +62,7 @@ def edit_group(request, group_id):
 
 def delete_group(request, group_id):
     group = Group.objects.get(id=group_id)
+    name = group.name
     group.delete()
+    messages.success(request, f'Group {name} deleted')
     return redirect('groups-list')
