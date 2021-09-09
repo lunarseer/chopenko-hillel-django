@@ -1,22 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-    <h5 align="left">Currency stamps </h5>
-    <p></p>
-    <table class="table table-sm table-bordered table-hover" align="center" cellpadding="2"  width="70%">
-        <tr>
-            <th>Created</th>
-            <th>Currency</th>
-            <th>Bank</th>
-            <th>Exchange Rate</th>
-        </tr>
+<div class="card w-75">
+    <div class="card-header mb-3">
+        Currency stamps
+    </div>
+    <div class="card-body mb-3">
+        <table class="table table-sm table-hover" align="center" cellpadding="2"  width="70%">
+            <tr>
+                <th>Created</th>
+                <th>Currency</th>
+                <th>Bank</th>
+                <th>Exchange Rate</th>
+            </tr>
 
-        {% for stamp in stamps %}
-        <tr>
-            <td>{{ stamp.created|date:'Y-m-d H:i' }}</td>
-            <td>{{ stamp.currency|safe }}</td>
-            <td>{{ stamp.bank|safe }}</td>
-            <td>{{ stamp.exchangerate|safe }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+            {% for stamp in stamps %}
+            <tr>
+                <td>{{ stamp.created|date:'Y-m-d H:i' }}</td>
+                <td>{{ stamp.currency|safe }}</td>
+                <td>{{ stamp.bank|safe }}</td>
+                <td>{{ stamp.exchangerate|safe }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
 {% endblock %}

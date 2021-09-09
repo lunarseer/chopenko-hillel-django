@@ -14,12 +14,19 @@
                 float: none;
                 margin-bottom: 10px;
             }
+            .center {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .btn-primary {
+                margin-right: 10px;
+                margin-left: 10px;
+            }
         </style>
-        {% block content %}
-    
-        {% endblock %}
+
         {% if messages %}
-        <div id="backend_messages" class="card mb-3">
+        <div id="backend_messages" class="card mb-3 w-75">
             <div class="card-header mb-3">
                 Messages
             </div>
@@ -30,6 +37,10 @@
             </div>
         </div>
         {% endif %}
+
+        {% block content %}
+    
+        {% endblock %}
         </div>
     </div>
 </body>

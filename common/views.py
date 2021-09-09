@@ -1,3 +1,6 @@
+from os import getenv
+from dotenv import load_dotenv
+
 from django.core.management import call_command
 
 from django.shortcuts import render, redirect
@@ -6,6 +9,9 @@ from django.contrib import messages
 from .forms import GeneratorCountForm, ContactForm
 from .tasks import send_mail_message
 from .models import CurrencyStamp
+
+
+load_dotenv()
 
 
 def index(request):
@@ -30,7 +36,7 @@ def contact_us(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             send_to = [
-                'lunarseer.test@gmail.com',
+                getenv('EMAIL_HOST_USER'),
                 ]
             subject = form.cleaned_data.get('subject')
             send_from = form.cleaned_data.get('send_from')

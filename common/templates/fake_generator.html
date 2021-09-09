@@ -14,9 +14,11 @@
                 Group generation requires both Students and Teachers exists
             </li>
         </ul>
-        <a href="{% url 'generate-students' %}" class="btn btn-primary btn-block">Generate Students</a>
-        <a href="{% url 'generate-teachers' %}" class="btn btn-primary">Generate Teachers</a>
-        <a href="{% url 'generate-groups' %}" class="btn btn-primary">Generate Groups</a>
+        <div class="container-fluid center">
+            <a href="{% url 'generate-students' %}" class="btn btn-primary btn-sm">Generate Students</a>
+            <a href="{% url 'generate-teachers' %}" class="btn btn-primary btn-sm">Generate Teachers</a>
+            <a href="{% url 'generate-groups' %}" class="btn btn-primary btn-sm">Generate Groups</a>
+        </div>
     </div>
 </div>
 {% endblock %}

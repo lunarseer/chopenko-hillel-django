@@ -1,15 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="card w-50">
+<form class="card w-50" action="" method="post">
     <div class="card-header mb-3">
         Contact us
+        <button class="btn btn-primary btn-sm" type="submit">Send Mail</button>
     </div>
-        <form class="card-body" action="" method="post">
-            {% csrf_token %}
-                {{ form.as_table }}
-            <input type="submit" value="Send Mail">    
-        </form>
-        
 
-</div>
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>From</td>
+                <td>{{ form.send_from }}</td>
+            </tr>
+            <t>
+                <td>Subject</td>
+                <td>{{ form.subject }}</td>
+            </tr>
+        </table>
+        {{ form.message }}
+
+
+
+    </div>
+</form>
 {% endblock %}
