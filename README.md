@@ -13,3 +13,4 @@ USAGE
 
 - Enjoy, All Endpoints collected on http://127.0.0.1:8000
 
+- run './manage.py get_currencies' for saving exchanges stamp to database
