@@ -5,10 +5,20 @@ from django.contrib import messages
 
 from .forms import GeneratorCountForm, ContactForm
 from .tasks import send_mail_message
+from .models import CurrencyStamp
 
 
 def index(request):
     return render(request, 'index.html')
+
+
+def get_currencies(request):
+    if request.method == "GET":
+        stamps = CurrencyStamp.objects.all()
+    return render(request,
+                  'currencies.html',
+                  {'stamps': stamps}
+                  )
 
 
 def fake_generator_page(request):

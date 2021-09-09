@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-    <h3>Contact us</h3>
-<form action="" method="post">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit">
-</form>
+<div class="card w-50">
+    <div class="card-header mb-3">
+        Contact us
+    </div>
+        <form class="card-body" action="" method="post">
+            {% csrf_token %}
+                {{ form.as_table }}
+            <input type="submit" value="Send Mail">    
+        </form>
+        
+
+</div>
 {% endblock %}

@@ -9,25 +9,28 @@
                 font-family: Helvetica;
                 background-color:rgb(255, 255, 255);
             }
+            .card {
+                margin: 0 auto;
+                float: none;
+                margin-bottom: 10px;
+            }
         </style>
-        {% block content %}Place Your Content Here{% endblock %}
-    </div>
-    <div id="backend_messages" class="container">
+        {% block content %}
+    
+        {% endblock %}
         {% if messages %}
-        <ul class="messages card">
-            <style type="text/css">
-                #backend_messages {
-                    padding: 10px;
-                    font-family: Helvetica;
-                    background-color:rgb(255, 255, 255);
-                }
-            </style>
-            <h5 style="padding-top: 10px;">Messages</h5>
+        <div id="backend_messages" class="card mb-3">
+            <div class="card-header mb-3">
+                Messages
+            </div>
+            <div class="card-body">
             {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
             {% endfor %}
-        </ul>
+            </div>
+        </div>
         {% endif %}
+        </div>
     </div>
 </body>
 </html>
