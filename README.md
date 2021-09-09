@@ -1,6 +1,5 @@
 # IT-HILLEL Django Project (I.Chopenko)
 
-
 USAGE
 
 - if exists, please remove old project and clone again, or remove db.sqlite3 and migrations
@@ -13,4 +12,4 @@ USAGE
 
 - Enjoy, All Endpoints collected on http://127.0.0.1:8000
 
-- run './manage.py get_currencies' for saving exchanges stamp to database
+- run './manage.py get_currencies' for saving exchanges stamp to database manually
