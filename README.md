@@ -7,7 +7,7 @@ USAGE
 
 - create and activate virtualenv
 
-- rename example.env to .env and properly configure it configure
+- rename example.env to .env and properly configure it
    
 - start run_server.sh in root folder (Rabbit-MQ starting using docker container)
 
