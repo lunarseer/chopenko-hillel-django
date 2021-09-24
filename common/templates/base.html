@@ -1,18 +1,35 @@
-{% include "header.html" %}
 <!DOCTYPE html>
 <html lang="en">
+<title>Hillel Django Project</title>
+<style type="text/css">
+    .navbar {
+        background-color:rgb(235, 235, 235);
+        height: 90px;
+        width: 100%;
+    }
+</style>
+{% include "header.html" %}
 <body>
     <div id="content" class="container">
         <style type="text/css">
             body {
-                padding-top: 90px;
+                padding: 5px;
+                margin-top: 90px;
                 font-family: Helvetica;
                 background-color:rgb(255, 255, 255);
+            }
+
+            .sidebar {
+                width: 200px;
+                float: left;
+            }
+            .content {
+                margin-left: 200px;
+                padding: 0px;
             }
             .card {
                 margin: 0 auto;
                 float: none;
-                margin-bottom: 10px;
             }
             .center {
                 display: flex;
@@ -22,6 +39,15 @@
             .btn-primary {
                 margin-right: 10px;
                 margin-left: 10px;
+            }
+            .btn-block {
+                margin: 2px;
+                width: 95%;
+            }
+            .btn-sm {
+                margin-right: 10px;
+                margin-left: 10px;
+                height: 26px;
             }
         </style>
 
@@ -37,10 +63,12 @@
             </div>
         </div>
         {% endif %}
-
-        {% block content %}
-    
-        {% endblock %}
+        <div>
+            {% include "sidebar.html" %}
+            {% block content %} {% endblock %}
+        </div>
+        
+        
         </div>
     </div>
 </body>
