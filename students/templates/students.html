@@ -1,22 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-
-    <h5 align="left">Students <a href="{% url 'add-student' %}"><button>Add</button></a></h5>
+<div class="card w-75">
+    <div class="card-header mb-3">
+        Students <a href="{% url 'add-group' %}" class="btn btn-primary btn-sm">Add Student</a>
+    </div>
+    <div class="card-body mb-3">
+        <table  class="table table-sm table-hover" align="center" cellpadding="2" width="60%">
+            <tr>
+                <th>ID</th>
+                <th>Full name</th>
+                <th>Actions</th>
+            </tr>
     
-    <p></p>
-    <table align="center" cellpadding="2"  width="40%">
-        <tr>
-            <th>ID</th>
-            <th>Full name</th>
-            <th>Actions</th>
-        </tr>
-
-        {% for student in students %}
-        <tr>
-            <td>{{ student.id|safe }}</td>
-            <td>{{ student|safe }}</td>
-            <td><a href="/edit_student/{{ student.id }}">Edit</a> <a href="/delete_student/{{ student.id }}">Delete</a></td>
-        </tr>
-        {% endfor %}
-    </table>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.id|safe }}</td>
+                <td>{{ student|safe }}</td>
+                <td><a href="/edit_student/{{ student.id }}">Edit</a> <a href="/delete_student/{{ student.id }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
 {% endblock %}

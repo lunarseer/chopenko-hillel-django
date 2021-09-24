@@ -1,3 +1,6 @@
+from os import getenv
+from dotenv import load_dotenv
+
 from django.core.management import call_command
 
 from django.shortcuts import render, redirect
@@ -5,10 +8,23 @@ from django.contrib import messages
 
 from .forms import GeneratorCountForm, ContactForm
 from .tasks import send_mail_message
+from .models import CurrencyStamp
+
+
+load_dotenv()
 
 
 def index(request):
     return render(request, 'index.html')
+
+
+def get_currencies(request):
+    if request.method == "GET":
+        stamps = CurrencyStamp.objects.all()
+    return render(request,
+                  'currencies.html',
+                  {'stamps': stamps}
+                  )
 
 
 def fake_generator_page(request):
@@ -20,7 +36,7 @@ def contact_us(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             send_to = [
-                'lunarseer.test@gmail.com',
+                getenv('EMAIL_HOST_USER'),
                 ]
             subject = form.cleaned_data.get('subject')
             send_from = form.cleaned_data.get('send_from')

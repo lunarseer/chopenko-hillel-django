@@ -4,7 +4,7 @@ from time import mktime
 
 from django.core.management.base import BaseCommand
 
-from common.models import MonoCurrency, NbuCurrency
+from common.models import CurrencyStamp
 
 
 CURRENCIES = {'USD': {'iso': 840},
@@ -20,28 +20,26 @@ ADDRESS = {
 
 class Command(BaseCommand):
 
-    def handle(self, **options):
-        nbu_data, mono_data = {}, {}
+    def do(self, **kwargs):
+        CurrencyStamp.objects.create(**kwargs)
 
+    def handle(self, **options):
         params = {'content-type': 'application/json'}
         nbu_raw = requests.get(ADDRESS['nbu'], params=params).json()
         params['X-Time'] = str(int(mktime(datetime.now().timetuple())))
         mono_raw = requests.get(ADDRESS['mono'], params=params).json()
 
         for cur in nbu_raw:
-            currency = cur.get('cc')
+            currency = cur.get('cc', '')
             if currency in CURRENCIES.keys():
-                nbu_data.update({currency: cur.get('rate')})
+                self.do(bank='nbu',
+                        currency=currency,
+                        exchangerate=cur.get('rate'))
 
         for cur in mono_raw:
             isocode = cur.get('currencyCodeA', None)
             if all([isocode in CODES.keys(),
                     cur.get('currencyCodeB', None) == 980]):
-                mono_data.update({CODES.get(isocode): cur.get('rateBuy')})
-
-        NbuCurrency.objects.create(rate_usd=nbu_data.get('USD', 0),
-                                   rate_eur=nbu_data.get('EUR', 0),
-                                   )
-        MonoCurrency.objects.create(rate_usd=mono_data.get('USD', 0),
-                                    rate_eur=mono_data.get('EUR', 0),
-                                    )
+                self.do(bank='mono',
+                        currency=CODES.get(isocode, None),
+                        exchangerate=cur.get('rateBuy', None))

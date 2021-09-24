@@ -46,14 +46,7 @@ class GenericPerson(GenericModel):
 
 class CurrencyStamp(models.Model):
 
-    rate_usd = models.DecimalField(max_digits=10, decimal_places=4)
-    rate_eur = models.DecimalField(max_digits=10, decimal_places=4)
+    bank = models.CharField(max_length=10)
+    currency = models.CharField(max_length=5)
+    exchangerate = models.DecimalField(max_digits=10, decimal_places=3)
     created = models.DateTimeField(auto_now_add=True)
-
-
-class MonoCurrency(CurrencyStamp):
-    pass
-
-
-class NbuCurrency(CurrencyStamp):
-    pass

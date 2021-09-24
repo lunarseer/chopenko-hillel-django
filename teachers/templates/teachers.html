@@ -1,21 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-    <h5 align="left">Teachers <a href="{% url 'add-teacher' %}"><button>Add</button></a></h5>
+<div class="card w-75">
+    <div class="card-header mb-3">
+        Teachers <a href="{% url 'add-teacher' %}" class="btn btn-primary btn-sm">Add Teacher</a>
+    </div>
+    <div class="card-body mb-3">
+        <table class="table table-sm table-hover" align="center" cellpadding="2"  width="70%">
+            <tr>
+                <th>ID</th>
+                <th>Full name</th>
+                <th>Actions</th>
+            </tr>
     
-    <p></p>
-    <table align="center" cellpadding="2"  width="40%">
-        <tr>
-            <th>ID</th>
-            <th>Full name</th>
-            <th>Actions</th>
-        </tr>
-
-        {% for teacher in teachers %}
-        <tr>
-            <td>{{ teacher.id|safe }}</td>
-            <td>{{ teacher|safe }}</td>
-            <td><a href="/edit_teacher/{{ teacher.id }}">Edit</a> <a href="/delete_teacher/{{ teacher.id }}">Delete</a></td>
-        </tr>
-        {% endfor %}
-    </table>
+            {% for teacher in teachers %}
+            <tr>
+                <td>{{ teacher.id|safe }}</td>
+                <td>{{ teacher|safe }}</td>
+                <td><a href="/edit_teacher/{{ teacher.id }}">Edit</a> <a href="/delete_teacher/{{ teacher.id }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
 {% endblock %}

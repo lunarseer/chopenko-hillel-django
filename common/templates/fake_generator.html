@@ -1,7 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-    <h5 align="center">Fake Entity Generator</h5>
-    <p  align="center"><a href="{% url 'generate-students' %}">Generate Fake Students</a></p>
-    <p  align="center"><a href="{% url 'generate-teachers' %}">Generate Fake Teachers</a></p>
-    <p  align="center"><a href="{% url 'generate-groups' %}">Generate Fake Groups</a></p>
+<div class="card w-75">
+    <div class="card-header mb-3">
+        Fake Generator
+    </div>
+    <div class="card-body">
+        <p>Performs using Faker python library</p>
+        <ul>
+            <li>
+                Teacher generation requires of Students exists
+            </li>
+            <li>
+                Group generation requires both Students and Teachers exists
+            </li>
+        </ul>
+        <div class="container-fluid center">
+            <a href="{% url 'generate-students' %}" class="btn btn-primary btn-sm">Generate Students</a>
+            <a href="{% url 'generate-teachers' %}" class="btn btn-primary btn-sm">Generate Teachers</a>
+            <a href="{% url 'generate-groups' %}" class="btn btn-primary btn-sm">Generate Groups</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

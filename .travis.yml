@@ -4,4 +4,9 @@ python:
 install:
   - pip install -r requirements.txt
 script:
+  - cp example.env .env
+  - pip check
+  - python manage.py validate_templates
+  - python manage.py check
+  - python manage.py makemigrations --check --dry-run
   - flake8

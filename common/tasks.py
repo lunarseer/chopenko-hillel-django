@@ -1,17 +1,23 @@
+
+from os import getenv
+from dotenv import load_dotenv
+from datetime import timedelta
+from celery import shared_task
+
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.core.management import call_command
 
-from celery import shared_task
-
 from .models import LogRecord
 
-from datetime import timedelta
+
+load_dotenv()
 
 
 @shared_task
 def clean_admin_logs():
-    timetodel = timezone.now() - timedelta(days=7)
+    log_lifetime = int(getenv('ADMIN_LOG_ROTATION_DAYS', 7))
+    timetodel = timezone.now() - timedelta(days=log_lifetime)
     print('Cleaning admin logs older than {} ...'.format(timetodel))
     logs = LogRecord.objects.filter(created__lte=timetodel,
                                     path__contains='admin')

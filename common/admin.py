@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import NbuCurrency, LogRecord, MonoCurrency
+from .models import CurrencyStamp, LogRecord
 
 
 @admin.register(LogRecord)
@@ -11,11 +11,6 @@ class LogAdmin(admin.ModelAdmin):
     list_filter = ['path', 'method']
 
 
-@admin.register(MonoCurrency)
-class MonoAdmin(admin.ModelAdmin):
-    list_display = ['created', 'rate_usd', 'rate_eur']
-
-
-@admin.register(NbuCurrency)
-class NbuAdmin(admin.ModelAdmin):
-    list_display = ['created', 'rate_usd', 'rate_eur']
+@admin.register(CurrencyStamp)
+class CurrencyAdmin(admin.ModelAdmin):
+    list_display = ['created', 'currency', 'bank', 'exchangerate']
