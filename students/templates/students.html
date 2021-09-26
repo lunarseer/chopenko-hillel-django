@@ -2,7 +2,7 @@
 {% block content %}
 <div class="card">
     <div class="card-header mb-3">
-        Students <a href="{% url 'add-group' %}" class="btn btn-primary btn-sm">Add Student</a>
+        Students <a href="{% url 'add-student' %}" class="btn btn-primary btn-sm">Add Student</a>
     </div>
     <div class="card-body mb-3">
         <table  class="table table-sm table-hover" align="center" cellpadding="2" width="60%">
@@ -20,6 +20,31 @@
             </tr>
             {% endfor %}
         </table>
+        {% if students.has_other_pages %}
+        <div>
+            <ul class="pagination center">
+                {% if students.has_previous %}
+                    <li><a href="?page={{ students.previous_page_number }}" class="btn btn-primary-outline">&laquo;</a></li>
+                {% else %}
+                    <li class="btn btn-primary-outline-disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in students.paginator.page_range %}
+                    {% if students.number == i %}
+                        <li class="btn btn-primary-outline-disabled"><span><span>[ </span>{{ i }}<span> ]</span></span></li>
+                    {% else %}
+                        <li><a href="?page={{ i }}" class="btn btn-primary-outline">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if students.has_next %}
+                    <li><a href="?page={{ students.next_page_number }}" class="btn btn-primary-outline">&raquo;</a></li>
+                {% else %}
+                    <li class="btn btn-primary-outline-disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+        </div>
+
+            
+        {% endif %}
     </div>
 </div>
 {% endblock %}

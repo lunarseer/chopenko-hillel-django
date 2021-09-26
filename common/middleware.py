@@ -2,15 +2,15 @@ from time import time
 
 import re
 
-from students.views import add_student, edit_student
+from students.views import StudentAddView, StudentEditView
 from teachers.views import add_teacher, edit_teacher
 from .models import LogRecord
 
 
-PHONE_FORMS = [add_teacher,
+PHONE_VIEWS = [add_teacher,
                edit_teacher,
-               add_student,
-               edit_student
+               StudentAddView,
+               StudentEditView
                ]
 
 
@@ -39,7 +39,7 @@ class PhoneFieldFormatterMiddleware:
         return responce
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        if view_func in PHONE_FORMS and request.method == 'POST':
+        if view_func in PHONE_VIEWS and request.method == 'POST':
             phone = request.POST.get('phone')
             post = request.POST.copy()
             post['phone'] = phone.strip('')

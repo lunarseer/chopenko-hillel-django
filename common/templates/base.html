@@ -23,9 +23,18 @@
                 width: 200px;
                 float: left;
             }
+            .pagination {
+                padding: 0px;
+            }
             .content {
                 margin-left: 200px;
                 padding: 0px;
+                height: 100%;
+            }
+            .backend-messages {
+                margin-left: 200px;
+                height: 100%;
+                margin: 2px
             }
             .card {
                 margin: 0 auto;
@@ -51,21 +60,22 @@
             }
         </style>
 
-        {% if messages %}
-        <div id="backend_messages" class="card mb-3 w-75">
-            <div class="card-header mb-3">
-                Messages
-            </div>
-            <div class="card-body">
-            {% for message in messages %}
-                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
-            {% endfor %}
-            </div>
-        </div>
-        {% endif %}
+
         <div>
             {% include "sidebar.html" %}
             {% block content %} {% endblock %}
+            {% if messages %}
+            <div id="backend_messages" class="card mb-1">
+                <div class="card-header mb-1">
+                    Messages
+                </div>
+                <div class="card-body mb-1">
+                {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+                {% endfor %}
+                </div>
+            </div>
+            {% endif %}
         </div>
         
         

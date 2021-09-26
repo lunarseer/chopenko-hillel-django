@@ -21,3 +21,7 @@ class ContactForm(forms.Form):
     message = forms.CharField(label='Message',
                               max_length=200,
                               widget=forms.Textarea)
+
+
+class ConfirmActionForm(forms.Form):
+    btn = forms.CharField()
