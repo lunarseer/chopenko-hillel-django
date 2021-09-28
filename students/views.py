@@ -1,74 +1,45 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Student
-from .forms import AddStudentForm, StudentFormFromModel
-from common.forms import ConfirmActionForm
+from .forms import (StudentAddForm,
+                    StudentFormFromModel,
+                    )
+from common.views import (GenericEntityListView,
+                          GenericEntityEditView,
+                          GenericEntityAddView,
+                          GenericEntityDeleteView
+                          )
+
 
 
 # Create your views here.
 
 
-class StudentsList(View):
+class StudentsList(GenericEntityListView):
 
-    def get(self, request):
-        students = Student.objects.all().order_by('id')
-        pageid = request.GET.get('page', 1)
-        pages = Paginator(students, 20)
-        try:
-            page_students = pages.page(pageid)
-        except PageNotAnInteger:
-            page_students = pages.page(1)
-        except EmptyPage:
-            page_students = pages.page(pages.num_pages)
-        return render(request, 'students.html', {'students': page_students})
+    def __init__(self):
+        self.model = Student
+        self.template = 'entities_view'
 
 
-class StudentEditView(View):
-    form = StudentFormFromModel
+class StudentEditView(GenericEntityEditView):
 
-    def get(self, request, id):
-        student = Student.objects.get(id=id)
-        form = self.form(instance=student)
-        return render(request,
-                      'edit_student_form.html',
-                      {'form': form, 'id': id})
-
-    def post(self, request, id):
-        form = self.form(request.POST)
-        if form.is_valid():
-            Student.objects.update_or_create(
-                                             defaults=form.cleaned_data,
-                                             id=id)
-
-            firstname = form.cleaned_data.get('firstname')
-            lastname = form.cleaned_data.get('lastname')
-            name = f'{firstname} {lastname}'
-
-            messages.success(request, f'Student {name} saved')
-            return redirect('students-list')
-        else:
-            return render(request,
-                          'edit_student_form.html',
-                          {'form': form, 'id': id})
+    def __init__(self):
+        self.model = Student
+        self.form = StudentFormFromModel
+        self.template = 'edit_entity_form'
+        self.redirect_url = 'students-list'
 
 
-class StudentAddView(View):
+class StudentAddView(GenericEntityAddView):
 
-    def get(self, request):
-        form = AddStudentForm()
-        return render(request, 'add_student_form.html', {'form': form})
-
-    def post(self, request):
-        form = AddStudentForm(request.POST)
-        if form.is_valid():
-            formdata = form.cleaned_data
-            student = Student.objects.create(**formdata)
-            name = f'{student.firstname} {student.lastname}'
-            messages.success(request, f'Student {name} Added')
-            return redirect('students-list')
+    def __init__(self):
+        self.model = Student
+        self.form = StudentAddForm
+        self.template = 'add_entity_form'
+        self.redirect_url = 'students-list'
 
 
 class StudentDeleteView(View):

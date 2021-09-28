@@ -33,12 +33,13 @@ class GenericPerson(GenericModel):
     phone = models.CharField(max_length=12, null=True)
 
     def __str__(self):
-        return "{} {}".format(self.firstname,
-                              self.lastname)
+        return "{} {}".format(self.firstname, self.lastname)
 
     @property
-    def fullname(self):
-        return str(self)
+    def info(self):
+        return "{} {} {}".format(self.__class__.__name__,
+                                 self.firstname,
+                                 self.lastname)
 
     class Meta:
         abstract = True

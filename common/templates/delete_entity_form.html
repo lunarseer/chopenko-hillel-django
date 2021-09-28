@@ -2,10 +2,10 @@
 {% block content %}
 <div class="card">
     <div class="card-header mb-3">
-        Delete Teacher {{ teacher.firstname }} {{ teacher.lastname }}
+        {{ question }}
     </div>
     <div class="card-body mb-3">
-    <form action="{% url 'delete-teacher' teacher.id %}" method="post">
+    <form action="{% url 'delete-type' id %}" method="post">
         {% csrf_token %}
         <input class="btn-danger btn-block" style="width: 15%;" type="submit" name="btn" value="yes">
         <input class="btn-primary btn-block" style="width: 15%;" type="submit" name="btn" value="no">

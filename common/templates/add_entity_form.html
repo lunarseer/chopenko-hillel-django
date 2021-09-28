@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+    <h5>Add {{ type }} to DB</h5>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

@@ -6,9 +6,9 @@ from django.core.management import call_command
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-
-from .forms import GeneratorCountForm, ContactForm
+from .forms import GeneratorCountForm, ContactForm, ConfirmActionForm
 from .tasks import send_mail_message
 from .models import CurrencyStamp
 
@@ -33,6 +33,107 @@ class CurrencyView(View):
 class FakeGeneratorView(View):
     def get(self, request):
         return render(request, 'fake_generator.html', {})
+
+
+class GenericEntityListView(View):
+    def __init__(self, *args, **kwargs):
+        self.model = kwargs.get('model', None)
+        self.template = kwargs.get('template', '')
+        self.form = kwargs.get('form', None)
+
+    def get(self, request):
+        entities = self.model.objects.all().order_by('id')
+        pageid = request.GET.get('page', 1)
+        pages = Paginator(entities, 20)
+        try:
+            page = pages.page(pageid)
+        except PageNotAnInteger:
+            page = pages.page(1)
+        except EmptyPage:
+            page = pages.page(pages.num_pages)
+        return render(request,
+                '%s.html' % self.template,
+                {'entities': page, 'type': self.model.__name__}
+                )
+
+    def post(self, request):
+        pass
+
+
+class GenericEntityAddView(View):
+    def __init__(self, *args, **kwargs):
+        self.model = kwargs.get('model', None)
+        self.template = kwargs.get('template', '')
+        self.form = kwargs.get('form', None)
+        self.redirect_url = kwargs.get('redirect_url', '')
+
+    def get(self, request):
+        return render(request,
+                      '%s.html' % self.template,
+                      {'form': self.form(), 'type': self.model.__name__,})
+
+    def post(self, request):
+        form = self.form(request.POST)
+        if form.is_valid():
+            formdata = form.cleaned_data
+            entity = self.model.objects.create(**formdata)
+            messages.success(request, f'{entity.info} Added')
+            return redirect(self.redirect_url)
+
+
+class GenericEntityEditView(View):
+    def __init__(self, *args, **kwargs):
+        self.model = kwargs.get('model', None)
+        self.template = kwargs.get('template', '')
+        self.form = kwargs.get('form', None)
+        self.redirect_url = kwargs.get('redirect_url', '')
+
+    def get(self, request, id):
+        entity = self.model.objects.get(id=id)
+        form = self.form(instance=entity)
+        return render(request,
+                     '%s.html' % self.template,
+                      {'form': form, 'id': id, 'type': self.model.__name__})
+
+    def post(self, request, id):
+        form = self.form(request.POST)
+        if form.is_valid():
+            self.model.objects.update_or_create(
+                                                defaults=form.cleaned_data,
+                                                id=id)
+            entity = self.model.objects.get(id=id)
+            messages.success(request, f'{entity.info} saved')
+            return redirect(self.redirect_url)
+        else:
+            return render(request,
+                          '%s.html' % self.template,
+                          {'form': form, 'id': id, 'type': self.model.__name__})
+
+
+class GenericEntityDeleteView(View):
+
+    def __init__(self, *args, **kwargs):
+        self.model = kwargs.get('model', None)
+        self.template = kwargs.get('template', '')
+        self.form = kwargs.get('form', None)
+        self.redirect_url = kwargs.get('redirect_url', '')
+
+    def get(self, request, id):
+        entity = self.model.objects.get(id=id)
+        form = ConfirmActionForm()
+        return render(request,
+                      '%s.html' % self.template,
+                      {'form': form,  'id': id, 'msg': f'Delete {entity}?'})
+
+    def post(self, request, id):
+        form = ConfirmActionForm(request.POST)
+        if form.is_valid():
+            choice = form.cleaned_data.get('btn')
+            if choice == 'yes':
+                entity = self.model.objects.get(id=id)
+                entity.delete()
+                messages.success(request, f'{self.model.__name__} {entity} Deleted')
+        return redirect('students-list')
 
 
 class ContactUsView(View):

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-header mb-3">
+        {{ type }}s <a href="/add_{{ type|lower }}" class="btn btn-primary btn-sm">Add {{ type }}</a>
+    </div>
+    <div class="card-body mb-3">
+        <table  class="table table-sm table-hover" align="center" cellpadding="2" width="60%">
+            <tr>
+                <th>ID</th>
+                <th>Full name</th>
+                <th>Actions</th>
+            </tr>
+    
+            {% for entity in entities %}
+            <tr>
+                <td>{{ entity.id|safe }}</td>
+                <td>{{ entity|safe }}</td>
+                <td><a href="/edit_{{ type|lower }}/{{ entity.id }}">Edit</a> <a href="/delete_{{ type|lower }}/{{ entity.id }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% if entities.has_other_pages %}
+        <div>
+            <ul class="pagination center">
+                {% if entities.has_previous %}
+                    <li><a href="?page={{ entities.previous_page_number }}" class="btn btn-primary-outline">&laquo;</a></li>
+                {% else %}
+                    <li class="btn btn-primary-outline-disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in entities.paginator.page_range %}
+                    {% if entities.number == i %}
+                        <li class="btn btn-primary-outline-disabled"><span><span>[ </span>{{ i }}<span> ]</span></span></li>
+                    {% else %}
+                        <li><a href="?page={{ i }}" class="btn btn-primary-outline">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if entities.has_next %}
+                    <li><a href="?page={{ entities.next_page_number }}" class="btn btn-primary-outline">&raquo;</a></li>
+                {% else %}
+                    <li class="btn btn-primary-outline-disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+        </div>
+
+            
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
