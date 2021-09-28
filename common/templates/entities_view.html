@@ -36,33 +36,7 @@
             </tr>
             {% endfor %}
         </table>
-        {% if is_paginated %}
-
-        <!-- Pagination -->
-        <div>
-            <ul class="pagination center">
-                {% if page_obj.has_previous %}
-                    <li><a href="?page={{ page_obj.previous_page_number }}" class="btn btn-sm btn-primary">&laquo;</a></li>
-                {% else %}
-                    <li class="btn btn-sm btn-outline-primary disabled"><span>&laquo;</span></li>
-                {% endif %}
-                {% for i in page_obj.paginator.page_range %}
-                    {% if page_obj.number == i %}
-                        <li class="btn btn-sm btn-outline-primary disabled"><span>{{ i }}</span></li>
-                    {% else %}
-                        <li><a href="?page={{ i }}" class="btn btn-sm btn-primary">{{ i }}</a></li>
-                    {% endif %}
-                {% endfor %}
-                {% if page_obj.has_next %}
-                    <li><a href="?page={{ page_obj.next_page_number }}" class="btn btn-sm btn-primary">&raquo;</a></li>
-                {% else %}
-                    <li class="btn btn-sm btn-outline-primary disabled"><span>&raquo;</span></li>
-                {% endif %}
-            </ul>
-        </div>
-        <!-- Pagination End -->
-            
-        {% endif %}
+        {% include "pagination.html" %}
     </div>
 </div>
 {% endblock %}

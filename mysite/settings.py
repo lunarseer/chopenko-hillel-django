@@ -23,6 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 CELERY_BROKER_URL = 'pyamqp://guest@localhost'
 
+CELERY_BROKER_TRANSPORT_OPTIONS = {"max_retries": 3,
+                                   "interval_start": 0,
+                                   "interval_step": 0.2,
+                                   "interval_max": 0.5}
+
 CELERY_BEAT_SCHEDULE = {
     'daily_clear_admin_logs': {
         'task': 'common.tasks.clean_admin_logs',

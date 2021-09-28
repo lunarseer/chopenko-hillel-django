@@ -12,10 +12,12 @@ class Group(GenericModel):
     students = models.ManyToManyField(Student, related_name='students2group')
     headman = models.ForeignKey(Student,
                                 blank=True,
+                                null=True,
                                 default=None,
                                 on_delete=models.CASCADE)
     teacher = models.ForeignKey(Teacher,
                                 blank=True,
+                                null=True,
                                 default=None,
                                 on_delete=models.CASCADE)
 

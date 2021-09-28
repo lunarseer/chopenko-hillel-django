@@ -12,7 +12,6 @@ from .forms import GeneratorCountForm, ContactForm, ConfirmActionForm
 from .tasks import send_mail_message
 from .models import CurrencyStamp
 
-
 load_dotenv()
 
 
@@ -43,7 +42,7 @@ class GenericEntityListView(ListView):
         return context
 
 
-class GenericEntityAddView(View):
+class GenericEntityAddView(TemplateView):
 
     def get(self, request):
         return render(request,
@@ -59,7 +58,7 @@ class GenericEntityAddView(View):
             return redirect(self.redirect_url)
 
 
-class GenericEntityEditView(View):
+class GenericEntityEditView(TemplateView):
 
     def get(self, request, id):
         entity = self.model.objects.get(id=id)
@@ -83,16 +82,25 @@ class GenericEntityEditView(View):
                           {'form': form, 'id': id, 'type': self.model.__name__})
 
 
-class GenericEntityDeleteView(View):
+class GenericEntityDeleteView(TemplateView):
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fields'] = [x.name for x in self.model._meta.fields]
+        context['type'] = self.model.__name__
+        return context
 
     def get(self, request, id):
         entity = self.model.objects.get(id=id)
         form = ConfirmActionForm()
         question = f'Delete {self.model.__name__} {entity}?'
+        context = {'form': form,
+                   'id': id,
+                   'question': question}
+        context.update(self.get_context_data())
         return render(request,
-                      '%s.html' % self.template,
-                      {'form': form,  'id': id, 'type': self.model.__name__, 'question': question})
+                      self.template_name,
+                      context)
 
     def post(self, request, id):
         form = ConfirmActionForm(request.POST)
@@ -103,17 +111,20 @@ class GenericEntityDeleteView(View):
                 entity.delete()
                 message = f'{self.model.__name__} {entity} Deleted'
                 messages.success(request, message)
-        return redirect(self.redirect_url)
+            return redirect(self.redirect_url)
 
 
-class ContactUsView(View):
-    def get(self, request):
-        form = ContactForm()
-        return render(request, 'contact_us.html',
-                      {'form': form})
+class ContactUsView(TemplateView):
+    form_class = ContactForm
+    template_name = 'contact_us.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class()
+        return context
 
     def post(self, request):
-        form = ContactForm(request.POST)
+        form = self.form_class(request.POST)
         if form.is_valid():
             send_to = [
                 getenv('EMAIL_HOST_USER'),
@@ -121,15 +132,18 @@ class ContactUsView(View):
             subject = form.cleaned_data.get('subject')
             send_from = form.cleaned_data.get('send_from')
             message = form.cleaned_data.get('message')
-            send_mail_message.delay(send_to=send_to,
-                                    subject=subject,
-                                    send_from=send_from,
-                                    message=message)
-            messages.success(request, 'Email Sent.')
+            try:
+                send_mail_message.delay(send_to=send_to,
+                                        subject=subject,
+                                        send_from=send_from,
+                                        message=message)
+                messages.success(request, 'Email Sent.')
+            except Exception as e:
+                messages.error(request, f'Email Not Sent. message: {e}')
             return redirect('home')
 
 
-class EntityGeneratorView(View):
+class EntityGeneratorView(TemplateView):
     entitytype = 'generic'
 
     def get(self, request):

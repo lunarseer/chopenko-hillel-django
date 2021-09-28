@@ -25,7 +25,7 @@ class TeacherEditView(GenericEntityEditView):
     def __init__(self):
         self.model = Teacher
         self.form = TeacherFormFromModel
-        self.template = 'edit_entity_form'
+        self.template_name = 'edit_entity_form.html'
         self.redirect_url = 'teachers-list'
 
 
@@ -34,7 +34,7 @@ class TeacherAddView(GenericEntityAddView):
     def __init__(self):
         self.model = Teacher
         self.form = TeacherAddForm
-        self.template = 'add_entity_form'
+        self.template_name = 'add_entity_form.html'
         self.redirect_url = 'teachers-list'
 
 
@@ -42,5 +42,5 @@ class TeacherDeleteView(GenericEntityDeleteView):
 
     def __init__(self):
         self.model = Teacher
-        self.template = 'delete_entity_form'
+        self.template_name = 'delete_entity_form.html'
         self.redirect_url = 'teachers-list'
