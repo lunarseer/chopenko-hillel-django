@@ -1,68 +1,53 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.contrib import messages
+from django.db.models import Count
 
 from .models import Group
-from students.models import Student
 from teachers.models import Teacher
 
-from .forms import AddGroupForm, GroupFormFromModel
+from .forms import GroupAddForm, GroupFormFromModel
+
+from common.views import (GenericEntityListView,
+                          GenericEntityEditView,
+                          GenericEntityAddView,
+                          GenericEntityDeleteView
+                          )
+
 
 
 # Create your views here.
 
 
-def groups_list(request):
-    groups = Group.objects.all()
-    return render(request, 'groups.html', {'groups': groups})
+class GroupsListView(GenericEntityListView):
+
+    def __init__(self):
+        self.model = Group
+        self.template_name = 'entities_view.html'
+
+    def get_queryset(self):
+        annotation = {'fkeycount': Count('students')}
+        return Group.objects.annotate(**annotation).order_by('id')
 
 
-def get_group(request, group_id):
-    group = Group.objects.get(id=group_id)
-    return HttpResponse(status=200, content=group)
+class GroupEditView(GenericEntityEditView):
+
+    def __init__(self):
+        self.model = Group
+        self.form = GroupFormFromModel
+        self.template = 'edit_entity_form'
+        self.redirect_url = 'groups-list'
 
 
-def add_group(request):
-    if not all([Student.objects.all(), Teacher.objects.all()]):
-        return HttpResponse("Add Students and Teachers first")
-    if request.method == "POST":
-        form = AddGroupForm(request.POST)
-        if form.is_valid():
-            formdata = form.cleaned_data
-            group_name = formdata['name']
-            Group.objects.create(name=group_name,
-                                 discipline=formdata['discipline'])
-            messages.success(request, f'Group {group_name} added')
-            return redirect('groups-list')
-        else:
-            return HttpResponse('Invalid Form', form.fields)
-    else:
-        form = AddGroupForm()
-    return render(request, 'add_group_form.html', {'form': form})
+class GroupAddView(GenericEntityAddView):
+
+    def __init__(self):
+        self.model = Group
+        self.form = GroupAddForm
+        self.template = 'add_entity_form'
+        self.redirect_url = 'groups-list'
 
 
-def edit_group(request, group_id):
-    if request.method == "POST":
-        form = GroupFormFromModel(request.POST)
-        if form.is_valid():
-            Group.objects.update_or_create(
-                                           defaults=form.cleaned_data,
-                                           id=group_id)
-            name = form.cleaned_data.get('name', '')
-            messages.success(request, f'Group {name} Saved')
-            return redirect('groups-list')
-    else:
-        group = Group.objects.get(id=group_id)
-        form = GroupFormFromModel(instance=group)
-        return render(
-                      request,
-                      'edit_group_form.html',
-                      {'form': form, 'group_id': group_id})
+class GroupDeleteView(GenericEntityDeleteView):
 
-
-def delete_group(request, group_id):
-    group = Group.objects.get(id=group_id)
-    name = group.name
-    group.delete()
-    messages.success(request, f'Group {name} deleted')
-    return redirect('groups-list')
+    def __init__(self):
+        self.model = Group
+        self.template = 'delete_entity_form'
+        self.redirect_url = 'groups-list'

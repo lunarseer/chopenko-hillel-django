@@ -5,44 +5,62 @@
         {{ type }}s <a href="/add_{{ type|lower }}" class="btn btn-primary btn-sm">Add {{ type }}</a>
     </div>
     <div class="card-body mb-3">
-        <table  class="table table-sm table-hover" align="center" cellpadding="2" width="60%">
+        <table class="table table-sm table-hover" align="center" cellpadding="2" width="60%">
+            <!-- Table First Row -->
             <tr>
-                <th>ID</th>
-                <th>Full name</th>
+                {% if 'id' in fields %}<th>ID</th>{% endif %}
+                <th>{{ type }}</th>
+                {% if 'phone' in fields %}<th>Phone</th>{% endif %}
+                {% if type == 'Group' %}<th>Students</th>{% endif %}
+                {% if 'discipline' in fields %}<th>Discipline</th>{% endif %}
+                {% if 'teacher' in fields %}<th>Teacher</th>{% endif %}
+                {% if 'headman' in fields %}<th>Headman</th>{% endif %}
                 <th>Actions</th>
             </tr>
     
-            {% for entity in entities %}
+            <!-- Table all Rows -->
+            {% for entity in object_list %}
             <tr>
                 <td>{{ entity.id|safe }}</td>
                 <td>{{ entity|safe }}</td>
+                {% if 'phone' in fields %}<th>{{ entity.phone }}</th>{% endif %}
+                {% if entity.fkeycount %}<th>{{ entity.fkeycount }}</th>{% endif %}
+                {% if 'discipline' in fields %}<th>{{ entity.discipline }}</th>{% endif %}
+                {% if 'teacher' in fields %}
+                    <td><a href="/edit_teacher/{{ entity.teacher.id }}">{{ entity.teacher|safe }}</a></td>
+                {% endif %}
+                {% if 'headman' in fields %}
+                    <td><a href="/edit_student/{{ entity.headman.id }}">{{ entity.headman|safe }}</a></td>
+                {% endif %}
                 <td><a href="/edit_{{ type|lower }}/{{ entity.id }}">Edit</a> <a href="/delete_{{ type|lower }}/{{ entity.id }}">Delete</a></td>
             </tr>
             {% endfor %}
         </table>
-        {% if entities.has_other_pages %}
+        {% if is_paginated %}
+
+        <!-- Pagination -->
         <div>
             <ul class="pagination center">
-                {% if entities.has_previous %}
-                    <li><a href="?page={{ entities.previous_page_number }}" class="btn btn-primary-outline">&laquo;</a></li>
+                {% if page_obj.has_previous %}
+                    <li><a href="?page={{ page_obj.previous_page_number }}" class="btn btn-sm btn-primary">&laquo;</a></li>
                 {% else %}
-                    <li class="btn btn-primary-outline-disabled"><span>&laquo;</span></li>
+                    <li class="btn btn-sm btn-outline-primary disabled"><span>&laquo;</span></li>
                 {% endif %}
-                {% for i in entities.paginator.page_range %}
-                    {% if entities.number == i %}
-                        <li class="btn btn-primary-outline-disabled"><span><span>[ </span>{{ i }}<span> ]</span></span></li>
+                {% for i in page_obj.paginator.page_range %}
+                    {% if page_obj.number == i %}
+                        <li class="btn btn-sm btn-outline-primary disabled"><span>{{ i }}</span></li>
                     {% else %}
-                        <li><a href="?page={{ i }}" class="btn btn-primary-outline">{{ i }}</a></li>
+                        <li><a href="?page={{ i }}" class="btn btn-sm btn-primary">{{ i }}</a></li>
                     {% endif %}
                 {% endfor %}
-                {% if entities.has_next %}
-                    <li><a href="?page={{ entities.next_page_number }}" class="btn btn-primary-outline">&raquo;</a></li>
+                {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}" class="btn btn-sm btn-primary">&raquo;</a></li>
                 {% else %}
-                    <li class="btn btn-primary-outline-disabled"><span>&raquo;</span></li>
+                    <li class="btn btn-sm btn-outline-primary disabled"><span>&raquo;</span></li>
                 {% endif %}
             </ul>
         </div>
-
+        <!-- Pagination End -->
             
         {% endif %}
     </div>

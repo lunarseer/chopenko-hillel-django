@@ -3,12 +3,12 @@ from time import time
 import re
 
 from students.views import StudentAddView, StudentEditView
-from teachers.views import add_teacher, edit_teacher
+from teachers.views import TeacherAddView, TeacherEditView
 from .models import LogRecord
 
 
-PHONE_VIEWS = [add_teacher,
-               edit_teacher,
+PHONE_VIEWS = [TeacherAddView,
+               TeacherEditView,
                StudentAddView,
                StudentEditView
                ]

@@ -13,11 +13,11 @@
                 <th>Exchange Rate</th>
             </tr>
 
-            {% for stamp in stamps %}
+            {% for stamp in object_list %}
             <tr>
                 <td>{{ stamp.created|date:'Y-m-d H:i' }}</td>
                 <td>{{ stamp.currency|safe }}</td>
-                <td>{{ stamp.bank|safe }}</td>
+                <td>{{ stamp.bank|safe|upper }}</td>
                 <td>{{ stamp.exchangerate|safe }}</td>
             </tr>
             {% endfor %}

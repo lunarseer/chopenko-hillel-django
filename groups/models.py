@@ -21,3 +21,8 @@ class Group(GenericModel):
 
     def __str__(self):
         return "{}".format(self.name)
+
+    @property
+    def info(self):
+        return "{} {}".format(self.__class__.__name__,
+                              self.name)

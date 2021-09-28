@@ -6,7 +6,7 @@ from django.core.management import call_command
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import TemplateView, ListView
 
 from .forms import GeneratorCountForm, ContactForm, ConfirmActionForm
 from .tasks import send_mail_message
@@ -16,60 +16,38 @@ from .models import CurrencyStamp
 load_dotenv()
 
 
-class IndexView(View):
-    def get(self, request):
-        return render(request, 'index.html')
+class IndexView(TemplateView):
+    template_name = 'index.html'
 
 
-class CurrencyView(View):
-    def get(self, request):
-        stamps = CurrencyStamp.objects.all()
-        return render(request,
-                      'currencies.html',
-                      {'stamps': stamps}
-                      )
+class CurrencyView(ListView):
+    paginate_by = 20
+    model = CurrencyStamp
+    template_name = 'currencies.html'
 
 
-class FakeGeneratorView(View):
-    def get(self, request):
-        return render(request, 'fake_generator.html', {})
+class FakeGeneratorView(TemplateView):
+    template_name = 'fake_generator.html'
 
 
-class GenericEntityListView(View):
-    def __init__(self, *args, **kwargs):
-        self.model = kwargs.get('model', None)
-        self.template = kwargs.get('template', '')
-        self.form = kwargs.get('form', None)
+class GenericEntityListView(ListView):
+    paginate_by = 20
 
-    def get(self, request):
-        entities = self.model.objects.all().order_by('id')
-        pageid = request.GET.get('page', 1)
-        pages = Paginator(entities, 20)
-        try:
-            page = pages.page(pageid)
-        except PageNotAnInteger:
-            page = pages.page(1)
-        except EmptyPage:
-            page = pages.page(pages.num_pages)
-        return render(request,
-                '%s.html' % self.template,
-                {'entities': page, 'type': self.model.__name__}
-                )
+    def get_queryset(self):
+        return self.model.objects.all().order_by('id')
 
-    def post(self, request):
-        pass
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fields'] = [x.name for x in self.model._meta.fields]
+        context['type'] = self.model.__name__
+        return context
 
 
 class GenericEntityAddView(View):
-    def __init__(self, *args, **kwargs):
-        self.model = kwargs.get('model', None)
-        self.template = kwargs.get('template', '')
-        self.form = kwargs.get('form', None)
-        self.redirect_url = kwargs.get('redirect_url', '')
 
     def get(self, request):
         return render(request,
-                      '%s.html' % self.template,
+                      self.template_name,
                       {'form': self.form(), 'type': self.model.__name__,})
 
     def post(self, request):
@@ -82,17 +60,12 @@ class GenericEntityAddView(View):
 
 
 class GenericEntityEditView(View):
-    def __init__(self, *args, **kwargs):
-        self.model = kwargs.get('model', None)
-        self.template = kwargs.get('template', '')
-        self.form = kwargs.get('form', None)
-        self.redirect_url = kwargs.get('redirect_url', '')
 
     def get(self, request, id):
         entity = self.model.objects.get(id=id)
         form = self.form(instance=entity)
         return render(request,
-                     '%s.html' % self.template,
+                      self.template_name,
                       {'form': form, 'id': id, 'type': self.model.__name__})
 
     def post(self, request, id):
@@ -112,18 +85,14 @@ class GenericEntityEditView(View):
 
 class GenericEntityDeleteView(View):
 
-    def __init__(self, *args, **kwargs):
-        self.model = kwargs.get('model', None)
-        self.template = kwargs.get('template', '')
-        self.form = kwargs.get('form', None)
-        self.redirect_url = kwargs.get('redirect_url', '')
 
     def get(self, request, id):
         entity = self.model.objects.get(id=id)
         form = ConfirmActionForm()
+        question = f'Delete {self.model.__name__} {entity}?'
         return render(request,
                       '%s.html' % self.template,
-                      {'form': form,  'id': id, 'msg': f'Delete {entity}?'})
+                      {'form': form,  'id': id, 'type': self.model.__name__, 'question': question})
 
     def post(self, request, id):
         form = ConfirmActionForm(request.POST)
@@ -132,8 +101,9 @@ class GenericEntityDeleteView(View):
             if choice == 'yes':
                 entity = self.model.objects.get(id=id)
                 entity.delete()
-                messages.success(request, f'{self.model.__name__} {entity} Deleted')
-        return redirect('students-list')
+                message = f'{self.model.__name__} {entity} Deleted'
+                messages.success(request, message)
+        return redirect(self.redirect_url)
 
 
 class ContactUsView(View):

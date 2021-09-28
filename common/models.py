@@ -10,8 +10,17 @@ class LogRecord(models.Model):
 
 class GenericModel(models.Model):
 
+    @property
     def itemname(self):
         return self.__class__.__name__
+
+    @property
+    def info(self):
+        return "{}".format(self.itemname)
+
+    def info(self):
+        return "{} {}".format(self.__class__.__name__,
+                              self.fullname)
 
     def values(self):
         def valid(key):
@@ -36,10 +45,14 @@ class GenericPerson(GenericModel):
         return "{} {}".format(self.firstname, self.lastname)
 
     @property
+    def fullname(self):
+        return "{} {}".format(self.firstname,
+                              self.lastname)
+
+    @property
     def info(self):
-        return "{} {} {}".format(self.__class__.__name__,
-                                 self.firstname,
-                                 self.lastname)
+        return "{} {}".format(self.__class__.__name__,
+                              self.fullname)
 
     class Meta:
         abstract = True
