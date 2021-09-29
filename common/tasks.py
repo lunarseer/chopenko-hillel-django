@@ -3,7 +3,6 @@ from os import getenv
 from dotenv import load_dotenv
 from datetime import timedelta
 from celery import shared_task
-from kombu.exceptions import OperationalError
 
 from django.utils import timezone
 from django.core.mail import send_mail

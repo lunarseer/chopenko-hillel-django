@@ -18,10 +18,6 @@ class GenericModel(models.Model):
     def info(self):
         return "{}".format(self.itemname)
 
-    def info(self):
-        return "{} {}".format(self.__class__.__name__,
-                              self.fullname)
-
     def values(self):
         def valid(key):
             if key not in ["_state"]:

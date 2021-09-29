@@ -7,8 +7,8 @@
     <div class="card-body mb-3">
     <form action="/delete_{{ type|lower }}/{{ id }}" method="post">
         {% csrf_token %}
-        <input class="btn-danger btn-block" style="width: 15%;" type="submit" name="btn" value="yes">
-        <input class="btn-primary btn-block" style="width: 15%;" type="submit" name="btn" value="no">
+        <input class="btn btn-danger btn-block" style="width: 15%;" type="submit" name="btn" value="yes">
+        <input class="btn btn-primary btn-block" style="width: 15%;" type="submit" name="btn" value="no">
     </form>
     </div>
 {% endblock %}

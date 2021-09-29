@@ -5,7 +5,6 @@ from django.core.management import call_command
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.views import View
 from django.views.generic import TemplateView, ListView
 
 from .forms import GeneratorCountForm, ContactForm, ConfirmActionForm
@@ -13,6 +12,31 @@ from .tasks import send_mail_message
 from .models import CurrencyStamp
 
 load_dotenv()
+
+
+class Error(TemplateView):
+
+    template_name = 'error.html'
+
+    def error_400(self, *args, **kwargs):
+        request = args[0]
+        extradata = {'msg': 'Error 400 - Bad Request!'}
+        return render(request, self.template_name, extradata)
+
+    def error_403(self, *args, **kwargs):
+        request = args[0]
+        extradata = {'msg': 'Error 404 - Access Forbidden!'}
+        return render(request, self.template_name, extradata)
+
+    def error_404(self, *args, **kwargs):
+        request = args[0]
+        extradata = {'msg': 'Error 404 - Page Not Found!'}
+        return render(request, self.template_name, extradata)
+
+    def error_500(self, *args, **kwargs):
+        request = args[0]
+        extradata = {'msg': 'Error 500 - Server Error!'}
+        return render(request, self.template_name, extradata)
 
 
 class IndexView(TemplateView):
@@ -23,6 +47,9 @@ class CurrencyView(ListView):
     paginate_by = 20
     model = CurrencyStamp
     template_name = 'currencies.html'
+
+    def get_queryset(self):
+        return self.model.objects.all().order_by('id')
 
 
 class FakeGeneratorView(TemplateView):
@@ -47,7 +74,7 @@ class GenericEntityAddView(TemplateView):
     def get(self, request):
         return render(request,
                       self.template_name,
-                      {'form': self.form(), 'type': self.model.__name__,})
+                      {'form': self.form(), 'type': self.model.__name__})
 
     def post(self, request):
         form = self.form(request.POST)
@@ -77,16 +104,16 @@ class GenericEntityEditView(TemplateView):
             messages.success(request, f'{entity.info} saved')
             return redirect(self.redirect_url)
         else:
+            extra = {'form': form, 'id': id, 'type': self.model.__name__}
             return render(request,
                           '%s.html' % self.template,
-                          {'form': form, 'id': id, 'type': self.model.__name__})
+                          extra)
 
 
 class GenericEntityDeleteView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['fields'] = [x.name for x in self.model._meta.fields]
         context['type'] = self.model.__name__
         return context
 
@@ -139,18 +166,20 @@ class ContactUsView(TemplateView):
                                         message=message)
                 messages.success(request, 'Email Sent.')
             except Exception as e:
-                messages.error(request, f'Email Not Sent. message: {e}')
+                messages.error(request, f'Email Not Sent! Celery Message: {e}')
             return redirect('home')
 
 
 class EntityGeneratorView(TemplateView):
     entitytype = 'generic'
+    template_name = 'generate_form.html'
+    form_class = GeneratorCountForm
 
-    def get(self, request):
-        form = GeneratorCountForm()
-        entitytype = self.entitytype.capitalize()
-        return render(request, 'generate_form.html',
-                      {'form': form, 'entitytype': entitytype})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['type'] = self.entitytype.capitalize()
+        context['form'] = self.form_class()
+        return context
 
     def post(self, request):
         form = GeneratorCountForm(request.POST)

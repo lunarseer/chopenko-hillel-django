@@ -48,9 +48,9 @@ SECRET_KEY = getenv('DJANGO_SECRET_KEY',
                     "django-insecure-9$6z@vjj&8k8z9fr=d0@iahfkcgcxw^9l+0eicd5y$e@1my^$p")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getenv('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # CSRF_COOKIE_SECURE = False
 

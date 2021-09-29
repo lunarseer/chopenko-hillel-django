@@ -14,7 +14,7 @@
         <style type="text/css">
             body {
                 padding: 5px;
-                margin-top: 90px;
+                margin-top: 60px;
                 font-family: Helvetica;
                 background-color:rgb(255, 255, 255);
             }
@@ -59,26 +59,20 @@
                 height: 26px;
             }
         </style>
-
-
         <div>
-            {% include "sidebar.html" %}
-            {% block content %} {% endblock %}
-            {% if messages %}
-            <div id="backend_messages" class="card mb-1">
-                <div class="card-header mb-1">
-                    Messages
-                </div>
-                <div class="card-body mb-1">
-                {% for message in messages %}
-                    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
-                {% endfor %}
+            <div id="backend_messages" style="height: 30px">
+                <div class="center">
+                    {% if messages %}
+                    {% for message in messages %}
+                        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>Message: {{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
-            {% endif %}
-        </div>
-        
-        
+            <!-- Need to fix include -->
+            <!-- {% include "messages.html" %} -->
+            {% include "sidebar.html" %}
+            {% block content %} {% endblock %}
         </div>
     </div>
 </body>

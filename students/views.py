@@ -9,10 +9,6 @@ from common.views import (GenericEntityListView,
                           )
 
 
-
-# Create your views here.
-
-
 class StudentsList(GenericEntityListView):
 
     def __init__(self):

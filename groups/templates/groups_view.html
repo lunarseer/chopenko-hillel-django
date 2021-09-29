@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="card mb-0">
-    <div class="card-header mb-0">
+<div class="card">
+    <div class="card-header mb-3">
         {{ type }}s <a href="/add_{{ type|lower }}" class="btn btn-primary btn-sm">Add {{ type }}</a>
     </div>
     <div class="card-body mb-3">
@@ -10,7 +10,10 @@
             <tr>
                 <th>ID</th>
                 <th>{{ type }}</th>
-                <th>Phone</th>
+                <th>Students</th>
+                <th>Discipline</th>
+                <th>Teacher</th>
+                <th>Headman</th>
                 <th>Actions</th>
             </tr>
     
@@ -19,7 +22,18 @@
             <tr>
                 <td>{{ entity.id|safe }}</td>
                 <td>{{ entity|safe }}</td>
-                <td>{{ entity.phone }}</td>
+                <td>{{ entity.fkeycount }}</td>
+                <td>{{ entity.discipline }}</td>
+                {% if entity.teacher %}
+                    <td><a href="/edit_teacher/{{ entity.teacher.id }}">{{ entity.teacher|safe }}</a></td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                {% if entity.headman %}
+                    <td><a href="/edit_student/{{ entity.headman.id }}">{{ entity.headman|safe }}</a></td>
+                {% else %}
+                    <td></td>
+                {% endif %}
                 <td><a href="/edit_{{ type|lower }}/{{ entity.id }}">Edit</a> <a href="/delete_{{ type|lower }}/{{ entity.id }}">Delete</a></td>
             </tr>
             {% endfor %}

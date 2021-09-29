@@ -1,7 +1,6 @@
 from django.db.models import Count
 
 from .models import Group
-from teachers.models import Teacher
 
 from .forms import GroupAddForm, GroupFormFromModel
 
@@ -16,7 +15,7 @@ class GroupsListView(GenericEntityListView):
 
     def __init__(self):
         self.model = Group
-        self.template_name = 'entities_view.html'
+        self.template_name = 'groups_view.html'
 
     def get_queryset(self):
         annotation = {'fkeycount': Count('students')}
