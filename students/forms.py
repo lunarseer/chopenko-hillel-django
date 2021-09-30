@@ -6,7 +6,7 @@ from django.forms import ModelForm, CharField
 from .models import Student
 
 
-class AddStudentForm(AddPersonForm):
+class StudentAddForm(AddPersonForm):
     pass
 
 

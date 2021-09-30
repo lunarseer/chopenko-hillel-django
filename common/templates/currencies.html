@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="card w-75">
+<div class="card">
     <div class="card-header mb-3">
         Currency stamps
     </div>
@@ -13,15 +13,16 @@
                 <th>Exchange Rate</th>
             </tr>
 
-            {% for stamp in stamps %}
+            {% for stamp in object_list %}
             <tr>
                 <td>{{ stamp.created|date:'Y-m-d H:i' }}</td>
                 <td>{{ stamp.currency|safe }}</td>
-                <td>{{ stamp.bank|safe }}</td>
+                <td>{{ stamp.bank|safe|upper }}</td>
                 <td>{{ stamp.exchangerate|safe }}</td>
             </tr>
             {% endfor %}
         </table>
+        {% include "pagination.html" %}
     </div>
 </div>
 {% endblock %}

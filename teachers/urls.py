@@ -1,19 +1,23 @@
 from django.urls import path
 
 from .views import (
-                    teachers_list,
-                    add_teacher,
-                    get_teacher,
-                    edit_teacher,
-                    delete_teacher
+                    TeachersListView,
+                    TeacherAddView,
+                    TeacherEditView,
+                    TeacherDeleteView
                     )
 
 urlpatterns = [
-    path('teachers_list/', teachers_list, name='teachers-list'),
-    path('add_teacher/', add_teacher, name='add-teacher'),
-    path('get_teacher/<int:teacher_id>', get_teacher, name='get-teacher'),
-    path('edit_teacher/<int:teacher_id>', edit_teacher, name='edit-teacher'),
-    path('delete_teacher/<int:teacher_id>',
-         delete_teacher,
+    path('teachers_list/',
+         TeachersListView.as_view(),
+         name='teachers-list'),
+    path('add_teacher/',
+         TeacherAddView.as_view(),
+         name='add-teacher'),
+    path('edit_teacher/<int:id>',
+         TeacherEditView.as_view(),
+         name='edit-teacher'),
+    path('delete_teacher/<int:id>',
+         TeacherDeleteView.as_view(),
          name='delete-teacher'),
 ]

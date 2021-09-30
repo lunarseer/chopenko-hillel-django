@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-header mb-3">
+        Edit {{ type }} {{ id }}
+    </div>
+    <div class="card-body mb-3">
+        <form action="/edit_{{ type|lower }}/{{ id }}" method="post">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <input class="btn btn-primary btn-sm" type="submit" value="Submit">
+        </form>
+    </div>        
+</div>
+{% endblock %}

@@ -5,7 +5,7 @@ from common.validators import phone_validator
 from .models import Teacher
 
 
-class AddTeacherForm(AddPersonForm):
+class TeacherAddForm(AddPersonForm):
     pass
 
 

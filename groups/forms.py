@@ -3,7 +3,7 @@ from django import forms
 from .models import Group
 
 
-class AddGroupForm(forms.Form):
+class GroupAddForm(forms.Form):
 
     name = forms.CharField(max_length=30)
     discipline = forms.CharField(max_length=30)

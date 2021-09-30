@@ -1,18 +1,44 @@
-{% include "header.html" %}
 <!DOCTYPE html>
 <html lang="en">
+<title>Hillel Django Project</title>
+<style type="text/css">
+    .navbar {
+        background-color:rgb(235, 235, 235);
+        height: 90px;
+        width: 100%;
+    }
+</style>
+{% include "header.html" %}
 <body>
     <div id="content" class="container">
         <style type="text/css">
             body {
-                padding-top: 90px;
+                padding: 5px;
+                margin-top: 60px;
                 font-family: Helvetica;
                 background-color:rgb(255, 255, 255);
+            }
+
+            .sidebar {
+                width: 200px;
+                float: left;
+            }
+            .pagination {
+                padding: 0px;
+            }
+            .content {
+                margin-left: 200px;
+                padding: 0px;
+                height: 100%;
+            }
+            .backend-messages {
+                margin-left: 200px;
+                height: 100%;
+                margin: 2px
             }
             .card {
                 margin: 0 auto;
                 float: none;
-                margin-bottom: 10px;
             }
             .center {
                 display: flex;
@@ -23,24 +49,30 @@
                 margin-right: 10px;
                 margin-left: 10px;
             }
+            .btn-block {
+                margin: 2px;
+                width: 95%;
+            }
+            .btn-sm {
+                margin-right: 10px;
+                margin-left: 10px;
+                height: 26px;
+            }
         </style>
-
-        {% if messages %}
-        <div id="backend_messages" class="card mb-3 w-75">
-            <div class="card-header mb-3">
-                Messages
+        <div>
+            <div id="backend_messages" style="height: 30px">
+                <div class="center">
+                    {% if messages %}
+                    {% for message in messages %}
+                        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>Message: {{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
             </div>
-            <div class="card-body">
-            {% for message in messages %}
-                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
-            {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-
-        {% block content %}
-    
-        {% endblock %}
+            <!-- Need to fix include -->
+            <!-- {% include "messages.html" %} -->
+            {% include "sidebar.html" %}
+            {% block content %} {% endblock %}
         </div>
     </div>
 </body>
