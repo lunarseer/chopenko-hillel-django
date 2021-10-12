@@ -25,7 +25,7 @@ class Error(TemplateView):
 
     def error_403(self, *args, **kwargs):
         request = args[0]
-        extradata = {'msg': 'Error 404 - Access Forbidden!'}
+        extradata = {'msg': 'Error 403 - Access Forbidden!'}
         return render(request, self.template_name, extradata)
 
     def error_404(self, *args, **kwargs):
