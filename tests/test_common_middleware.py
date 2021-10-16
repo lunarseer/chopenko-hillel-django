@@ -1,17 +1,11 @@
 import pytest
-import random
 
-from django.test import Client
 from django.core.management import call_command
 from django.forms.models import model_to_dict
 
+from common.management.commands.utils import random_phone_number
 from common.models import LogRecord
 from students.models import Student
-
-
-@pytest.fixture
-def client():
-    return Client()
 
 
 @pytest.fixture
@@ -56,7 +50,7 @@ def test_phoneformatter_middleware_on_create_success(client):
 @pytest.mark.django_db
 def test_phoneformatter_middleware_on_edit_success(client, student_init):
     studdata = model_to_dict(Student.objects.first())
-    tempphone = str(380) + str(random.randrange(0, 999999999)).zfill(9)
+    tempphone = random_phone_number()
     assert len(studdata['phone']) == len(tempphone)
     studdata['phone'] = tempphone
     responce = client.post('/edit_student', studdata)
@@ -67,10 +61,9 @@ def test_phoneformatter_middleware_on_edit_success(client, student_init):
 @pytest.mark.django_db
 def test_phoneformatter_middleware_on_edit_fails(client, student_init):
     studdata = model_to_dict(Student.objects.first())
-    tempphone = str(380) + str(random.randrange(0, 99999999)).zfill(8)
-    studdata['phone'] = tempphone
+    studdata['phone'] = random_phone_number()[0:-1]
     responce = client.post('/edit_student', studdata)
     assert responce.status_code == 200
     assert Student.objects.count() == 1
     actual_studdata = model_to_dict(Student.objects.first())
-    assert actual_studdata['phone'] != tempphone
+    assert actual_studdata['phone'] != studdata['phone']
