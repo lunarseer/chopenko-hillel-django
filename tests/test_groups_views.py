@@ -121,11 +121,12 @@ def test_delete_group_form_get(client, prepare_groups):
 
 @pytest.mark.django_db
 def test_delete_group_form_post(client, prepare_groups):
-    group = Group.objects.first()
-    response = client.post(f'/delete_group/{group.id}',
-                           data={"btn": "yes"})
-    assert response.status_code == 302
-    message = [m.message for m in get_messages(response.wsgi_request)].pop()
-    assert re.search(f'Group {group.name} Deleted',
-                     message)
-    assert not Group.objects.filter(name=group.name)
+    for group in Group.objects.all():
+        response = client.post(f'/delete_group/{group.id}',
+                               data={"btn": "yes"})
+        assert response.status_code == 302
+        messages = get_messages(response.wsgi_request)
+        message = [m.message for m in messages].pop()
+        assert re.search(f'Group {group.name} Deleted',
+                         message)
+    assert Group.objects.count() == 0
