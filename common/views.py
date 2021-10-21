@@ -25,7 +25,7 @@ class Error(TemplateView):
 
     def error_403(self, *args, **kwargs):
         request = args[0]
-        extradata = {'msg': 'Error 404 - Access Forbidden!'}
+        extradata = {'msg': 'Error 403 - Access Forbidden!'}
         return render(request, self.template_name, extradata)
 
     def error_404(self, *args, **kwargs):
@@ -83,6 +83,11 @@ class GenericEntityAddView(TemplateView):
             entity = self.model.objects.create(**formdata)
             messages.success(request, f'{entity.info} Added')
             return redirect(self.redirect_url)
+        else:
+            extra = {'form': form, 'type': self.model.__name__}
+            return render(request,
+                          self.template_name,
+                          extra)
 
 
 class GenericEntityEditView(TemplateView):
@@ -106,7 +111,7 @@ class GenericEntityEditView(TemplateView):
         else:
             extra = {'form': form, 'id': id, 'type': self.model.__name__}
             return render(request,
-                          '%s.html' % self.template,
+                          self.template_name,
                           extra)
 
 

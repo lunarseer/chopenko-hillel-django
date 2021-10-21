@@ -10,3 +10,4 @@ script:
   - python manage.py check
   - python manage.py makemigrations --check --dry-run
   - flake8
+  - pytest -s

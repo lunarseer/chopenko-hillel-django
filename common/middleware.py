@@ -14,19 +14,6 @@ PHONE_VIEWS = [TeacherAddView,
                ]
 
 
-class TestMiddleware:
-
-    def __init__(self, get_responce) -> None:
-        self.get_responce = get_responce
-
-    def __call__(self, request):
-        print('before')
-        responce = self.get_responce(request)
-        print('after')
-        return responce
-
-
-# NOT USED
 class PhoneFieldFormatterMiddleware:
     """
     formatter for phone number field for addperson & editperson fields
@@ -43,7 +30,6 @@ class PhoneFieldFormatterMiddleware:
             phone = request.POST.get('phone')
             post = request.POST.copy()
             post['phone'] = phone.strip('')
-            print('phone number formatted')
 
 
 class AdminLogMiddleware:

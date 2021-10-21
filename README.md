@@ -5,10 +5,9 @@ USAGE
 - create and activate virtualenv
 
 - rename example.env to .env and properly configure it, if needed    
-(For this homework, DEBUG set to False, due to django Http error handling)
    
 - start run_server.sh in root folder (Rabbit-MQ starting using docker container)
-(For this homework, RabbitMQ and Celery disabled)
+(For this homework, test for success sendmail disabled, due to disabled Celery/RabbitMQ)
 
 - Enjoy, Homepage on http://127.0.0.1:8000
 

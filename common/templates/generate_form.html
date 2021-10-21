@@ -1,14 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="card">
-    <div class="card-header mb-3">
-        Generate Fake {{ type }}
+    <div class="card-header mb-3">Generate Fake {{ type }}
     </div>
     <div class="card-body">
         <form action="" method="post">
             {% csrf_token %}
                 Count {{ form.count }}
-            <input align="right" type="submit" value="Generate">
+            <input type="submit" value="Generate" align="right">
         </form>
     </div>
 </div>
