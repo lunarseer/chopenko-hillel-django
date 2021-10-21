@@ -132,11 +132,11 @@ if not DEBUG:
     db_from_env = dj_database_url.config(conn_max_age=500)
     DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'mydatabase',
         'USER': 'mydatabaseuser',
         'PASSWORD': 'mypassword',
-        'HOST': '127.0.0.1',
+        'HOST': 'localhost',
         'PORT': '5432',
         }
     }
