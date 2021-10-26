@@ -6,6 +6,7 @@ from common.views import Error
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', include('common.urls')),
+    path('', include('authuser.urls')),
     path('', include('students.urls')),
     path('', include('teachers.urls')),
     path('', include('groups.urls')),
