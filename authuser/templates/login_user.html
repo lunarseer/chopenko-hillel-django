@@ -3,7 +3,7 @@
     <form class="card" action="" method="post">
         {% csrf_token %}
         <div class="card-header mb-3">
-            Signup User
+            Sign Up | Login
         </div>
         <div class="card-body mb-3">
             <table style="margin: 10px;">
@@ -11,18 +11,11 @@
                 <tr>
                     <td>{{ field.label_tag }}</td>
                     <td>{{ field }}</td>
-                    {% if field.label_tag == "username" %}
-                        <td style="color: grey">{{ field.help_text }}</td>
-                    {% endif %}
-                    <!-- {% for error in field.errors %}
-                        <td style="color: red">{{ error }}</td>
-                    {% endfor %} -->
                 </tr>
                 {% endfor %}
-
             </table>
-            <button class="btn btn-primary" type="submit">Sign Up</button>
+            <button class="btn btn-primary"  style="width: 200px;" type="submit">Login</button>
+            <a href="{% url 'user-signup' %}" style="width: 200px;" class="btn btn-secondary">Sign Up</a>
         </div>
-
     </form>
 {% endblock %}
