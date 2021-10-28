@@ -80,7 +80,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'common',
-    'authuser',
+    'accounts',
     'teachers',
     'students',
     'groups',

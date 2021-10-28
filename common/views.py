@@ -72,6 +72,7 @@ class GenericEntityListView(ListView):
 class GenericEntityAddView(TemplateView):
 
     def get(self, request):
+        print(request.user)
         return render(request,
                       self.template_name,
                       {'form': self.form(), 'type': self.model.__name__})
