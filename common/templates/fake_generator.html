@@ -7,17 +7,29 @@
     <div class="card-body">
         <p>Performs using Faker python library</p>
         <ul>
-            <li>
-                Teacher generation requires of Students exists, generates group and assigning random 1-10 students
-            </li>
-            <li>
-                Group generation requires both Students and Teachers exists, adding random teacher and 1-10 students
-            </li>
+            {% if user.is_authenticated %}
+                <li>
+                    Teacher generation requires of Students exists, generates group and assigning random 1-10 students
+                </li>
+                <li>
+                    Group generation requires both Students and Teachers exists, adding random teacher and 1-10 students
+                </li>
+            {% else %}
+                <li>
+                    You need to be authenticated, to use these functions
+                </li>
+            {% endif %}
         </ul>
         <div class="container-fluid center">
-            <a href="{% url 'generate-students' %}" class="btn btn-primary btn-sm">Generate Students</a>
-            <a href="{% url 'generate-teachers' %}" class="btn btn-primary btn-sm">Generate Teachers</a>
-            <a href="{% url 'generate-groups' %}" class="btn btn-primary btn-sm">Generate Groups</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'generate-students' %}" class="btn btn-primary btn-sm">Generate Students</a>
+                <a href="{% url 'generate-teachers' %}" class="btn btn-primary btn-sm">Generate Teachers</a>
+                <a href="{% url 'generate-groups' %}" class="btn btn-primary btn-sm">Generate Groups</a>
+            {% else %}
+                <a href="{% url 'generate-students' %}" class="btn btn-secondary btn-sm disabled">Generate Students</a>
+                <a href="{% url 'generate-teachers' %}" class="btn btn-secondary btn-sm disabled">Generate Teachers</a>
+                <a href="{% url 'generate-groups' %}" class="btn btn-secondary btn-sm disabled">Generate Groups</a>
+            {% endif %}
         </div>
     </div>
 </div>
