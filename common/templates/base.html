@@ -64,7 +64,7 @@
             }
         </style>
         <div>
-            <div id="backend_messages" style="height: 60px">
+            <!-- <div id="backend_messages" style="height: 60px">
                 <div class="center">
                     {% if messages %}
                     {% for message in messages %}
@@ -72,11 +72,11 @@
                     {% endfor %}
                     {% endif %}
                 </div>
-            </div>
+            </div> -->
             <!-- Need to fix include -->
-            <!-- {% include "messages.html" %} -->
             {% include "sidebar.html" %}
             {% block content %} {% endblock %}
+            {% include "messages.html" %}
         </div>
     </div>
 </body>

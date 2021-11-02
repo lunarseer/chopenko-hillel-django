@@ -13,9 +13,17 @@
                     <td>{{ field }}</td>
                 </tr>
                 {% endfor %}
+                <tr>
+                    <td></td>
+                    <td>
+                        <p></p>
+                        <a href="{% url 'reset-password' %}">Forgotten password?</a>
+                    </td>
+                </tr>
             </table>
+            
             <button class="btn btn-primary"  style="width: 200px;" type="submit">Login</button>
-            <a href="{% url 'signup' %}" style="width: 200px;" class="btn btn-secondary">Sign Up</a>
+            <a href="{% url 'signup' %}" style="width: 200px;" class="btn btn-outline-primary">Sign Up</a>
         </div>
     </form>
 {% endblock %}

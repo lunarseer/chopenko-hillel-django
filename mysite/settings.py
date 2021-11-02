@@ -21,7 +21,19 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-CELERY_BROKER_URL = 'pyamqp://guest@localhost'
+SECRET_KEY = getenv('DJANGO_SECRET_KEY',
+                    "django-insecure-9$6z@vjj&8k8z9fr=d0@iahfkcgcxw^9l+0eicd5y$e@1my^$p")
+
+DEBUG = bool(getenv('DJANGO_DEBUG', False))
+
+ALLOWED_HOSTS = ['*']
+
+CSRF_COOKIE_SECURE = True
+
+CELERY_BROKER_URL = 'amqps://uvgpclfr:oHs4KWzIbTU7DyqE3to0W5_RicdL9EHg@clam.rmq.cloudamqp.com/uvgpclfr'
+if DEBUG:
+    CELERY_BROKER_URL = 'pyamqp://guest@localhost'
+
 
 CELERY_BROKER_TRANSPORT_OPTIONS = {"max_retries": 3,
                                    "interval_start": 0,
@@ -39,20 +51,6 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = getenv('DJANGO_SECRET_KEY',
-                    "django-insecure-9$6z@vjj&8k8z9fr=d0@iahfkcgcxw^9l+0eicd5y$e@1my^$p")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(getenv('DJANGO_DEBUG', False))
-
-ALLOWED_HOSTS = ['*']
-
-CSRF_COOKIE_SECURE = True
 
 """
     SMTP username: Your Gmail address.
