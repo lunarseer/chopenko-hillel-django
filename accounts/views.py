@@ -25,9 +25,13 @@ def login_view(request):
             user = authenticate(username=username, password=raw_password)
             if user:
                 login(request, user)
-                messages.add_message(request, messages.INFO, f'Welcome back, {username}!')
+                messages.add_message(request,
+                                     messages.INFO,
+                                     f'Welcome back, {username}!')
             else:
-                messages.add_message(request, messages.WARNING, f'Wrong username or password!')
+                messages.add_message(request,
+                                     messages.WARNING,
+                                     'Wrong username or password!')
                 return render(request, 'login_user.html', {'form': form})
             return redirect('home')
 
@@ -49,7 +53,9 @@ def signup_view(request):
         else:
             errors = dict(form.errors)
             for field, error in errors.items():
-                messages.add_message(request, messages.ERROR, f'{field}:{striptags(error)}')
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     f'{field}:{striptags(error)}')
     else:
         form = SignupForm()
     return render(request, 'signup_user.html', {'form': form})
@@ -68,11 +74,14 @@ def change_password_view(request):
         form = ChangePasswordForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            raw_password = cd.get('password1','')
+            raw_password = cd.get('password1', '')
             user = User.objects.get(username__exact=request.user)
             user.set_password(raw_password)
             user.save()
-            messages.add_message(request, messages.INFO, f'Log in back with a new password, {user.username}!')
+            messages.add_message(request,
+                                 messages.INFO,
+                                 f'Log in back with a new\
+                                 password, {user.username}!')
             logout(request)
             return redirect('home')
     else:
@@ -98,14 +107,14 @@ def reset_password_view(request):
                         domain = 'chopenko-hillel-django.herokuapp.com'
                         protocol = 'https'
                     c = {
-                        "email":user.email,
+                        "email": user.email,
                         'domain': domain,
                         'site_name': 'Website',
                         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                         "user": user,
                         'token': default_token_generator.make_token(user),
                         'protocol': protocol,
-					}
+                    }
                     message = render_to_string(email_template_name, c)
                     try:
                         send_mail_message.delay(send_to=[user.email],
@@ -114,9 +123,10 @@ def reset_password_view(request):
                                                 message=message)
                         messages.success(request, 'Email Sent.')
                     except Exception as e:
-                        messages.error(request, f'Email Not Sent! Celery Message: {e}')
+                        messages.error(request,
+                                       f'Email Not Sent! Celery Message: {e}')
             return redirect('password_reset_done')
-    else:            
+    else:
         form = ResetPasswordForm()
     return render(request, 'password_reset.html', {'form': form})
 
@@ -125,6 +135,8 @@ def logout_view(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
             username = request.user
-            messages.add_message(request, messages.SUCCESS, f'Good Bye, {username}!')
+            messages.add_message(request,
+                                 messages.SUCCESS,
+                                 f'Good Bye, {username}!')
             logout(request)
             return redirect('home')

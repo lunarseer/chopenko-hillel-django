@@ -2,8 +2,6 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from django.contrib.auth.models import User
 
-from .validators import change_password_validator
-
 
 class SignupForm(UserCreationForm):
     class Meta:
