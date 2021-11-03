@@ -36,3 +36,4 @@ def send_mail_message(send_to: list = None,
                       send_from: str = None,
                       subject: str = None):
     send_mail(f'{send_from}:{subject}', message, send_from, send_to)
+

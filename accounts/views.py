@@ -3,11 +3,16 @@ from django.shortcuts import render, redirect
 
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.views.generic import TemplateView, ListView, View
 from django.template.defaultfilters import striptags
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
 
 from .forms import SignupForm, LoginForm, ChangePasswordForm, ResetPasswordForm
-import pdb
+from common.tasks import send_mail_message
+
+from os import getenv
 
 
 def login_view(request):
@@ -72,21 +77,42 @@ def change_password_view(request):
             return redirect('home')
     else:
         form = ChangePasswordForm()
-    return render(request, 'change_password.html', {'form': form})
+    return render(request, 'password_change.html', {'form': form})
 
 
 def reset_password_view(request):
     if request.method == 'POST':
         form = ResetPasswordForm(request.POST)
         if form.is_valid():
-            return redirect('reset-password-done')
+            value = form.cleaned_data.get('email')
+            users = User.objects.filter(email=value)
+            if users.exists():
+                for user in users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "password_reset_email.txt"
+                    send_from = getenv('EMAIL_HOST_USER')
+                    c = {
+                        "email":user.email,
+                        'domain':'127.0.0.1:8000',
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+					}
+                    message = render_to_string(email_template_name, c)
+                    try:
+                        send_mail_message.delay(send_to=[user.email],
+                                                subject=subject,
+                                                send_from=send_from,
+                                                message=message)
+                        messages.success(request, 'Email Sent.')
+                    except Exception as e:
+                        messages.error(request, f'Email Not Sent! Celery Message: {e}')
+            return redirect('password_reset_done')
     else:            
         form = ResetPasswordForm()
-    return render(request, 'reset_password.html', {'form': form})
-
-
-def reset_password_done_view(request):
-    return render(request, 'reset_password_done.html', {})
+    return render(request, 'password_reset.html', {'form': form})
 
 
 def logout_view(request):
