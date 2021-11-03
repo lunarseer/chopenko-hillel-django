@@ -91,14 +91,20 @@ def reset_password_view(request):
                     subject = "Password Reset Requested"
                     email_template_name = "password_reset_email.txt"
                     send_from = getenv('EMAIL_HOST_USER')
+                    if getenv('DJANGO_DEBUG'):
+                        domain = '127.0.0.1:8000'
+                        protocol = 'http'
+                    else:
+                        domain = 'chopenko-hillel-django.herokuapp.com'
+                        protocol = 'https'
                     c = {
                         "email":user.email,
-                        'domain':'127.0.0.1:8000',
+                        'domain': domain,
                         'site_name': 'Website',
                         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                         "user": user,
                         'token': default_token_generator.make_token(user),
-                        'protocol': 'http',
+                        'protocol': protocol,
 					}
                     message = render_to_string(email_template_name, c)
                     try:
