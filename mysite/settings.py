@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import dj_database_url
 from pathlib import Path
 from os import getenv, path
 from dotenv import load_dotenv
 from celery.schedules import crontab
-
 
 load_dotenv()
 
@@ -48,11 +48,11 @@ SECRET_KEY = getenv('DJANGO_SECRET_KEY',
                     "django-insecure-9$6z@vjj&8k8z9fr=d0@iahfkcgcxw^9l+0eicd5y$e@1my^$p")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = getenv('DJANGO_DEBUG', True)
+DEBUG = bool(getenv('DJANGO_DEBUG', False))
 
 ALLOWED_HOSTS = ['*']
 
-# CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True
 
 """
     SMTP username: Your Gmail address.
@@ -87,6 +87,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -126,6 +127,22 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+if not DEBUG:
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'mydatabase',
+        'USER': 'mydatabaseuser',
+        'PASSWORD': 'mypassword',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        }
+    }
+    DATABASES['default'].update(db_from_env)
+
+# Heroku: Update database configuration from $DATABASE_URL.
 
 
 # Password validation
