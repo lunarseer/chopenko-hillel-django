@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+    <form class="card" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="card-header mb-3">
+            Sign Up | Login
+        </div>
+        <div class="card-body mb-3">
+            <table style="margin: 10px;">
+                {% for field in form %}
+                <tr>
+                    <td>{{ field.label_tag }}</td>
+                    <td>{{ field }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td>
+                        <p></p>
+                        <a href="{% url 'password_reset' %}">Forgotten password?</a>
+                    </td>
+                </tr>
+            </table>
+            
+            <button class="btn btn-primary"  style="width: 200px;" type="submit">Login</button>
+            <a href="{% url 'signup' %}" style="width: 200px;" class="btn btn-outline-primary">Sign Up</a>
+        </div>
+    </form>
+{% endblock %}

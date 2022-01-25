@@ -72,11 +72,17 @@ class GenericEntityListView(ListView):
 class GenericEntityAddView(TemplateView):
 
     def get(self, request):
+        if not request.user.is_authenticated:
+            messages.error(request, 'User Not Authenticated!')
+            return redirect('login')
         return render(request,
                       self.template_name,
                       {'form': self.form(), 'type': self.model.__name__})
 
     def post(self, request):
+        if not request.user.is_authenticated:
+            messages.error(request, 'User Not Authenticated!')
+            return redirect('login')
         form = self.form(request.POST)
         if form.is_valid():
             formdata = form.cleaned_data
@@ -93,6 +99,9 @@ class GenericEntityAddView(TemplateView):
 class GenericEntityEditView(TemplateView):
 
     def get(self, request, id):
+        if not request.user.is_authenticated:
+            messages.error(request, 'User Not Authenticated!')
+            return redirect('login')
         entity = self.model.objects.get(id=id)
         form = self.form(instance=entity)
         return render(request,
@@ -100,6 +109,9 @@ class GenericEntityEditView(TemplateView):
                       {'form': form, 'id': id, 'type': self.model.__name__})
 
     def post(self, request, id):
+        if not request.user.is_authenticated:
+            messages.error(request, 'User Not Authenticated!')
+            return redirect('login')
         form = self.form(request.POST)
         if form.is_valid():
             self.model.objects.update_or_create(
@@ -123,6 +135,9 @@ class GenericEntityDeleteView(TemplateView):
         return context
 
     def get(self, request, id):
+        if not request.user.is_authenticated:
+            messages.error(request, 'User Not Authenticated!')
+            return redirect('login')
         entity = self.model.objects.get(id=id)
         form = ConfirmActionForm()
         question = f'Delete {self.model.__name__} {entity}?'
@@ -135,6 +150,9 @@ class GenericEntityDeleteView(TemplateView):
                       context)
 
     def post(self, request, id):
+        if not request.user.is_authenticated:
+            messages.error(request, 'User Not Authenticated!')
+            return redirect('login')
         form = ConfirmActionForm(request.POST)
         if form.is_valid():
             choice = form.cleaned_data.get('btn')
@@ -187,6 +205,9 @@ class EntityGeneratorView(TemplateView):
         return context
 
     def post(self, request):
+        if not request.user.is_authenticated:
+            messages.error(request, 'User Not Authenticated!')
+            return redirect('login')
         form = GeneratorCountForm(request.POST)
         if form.is_valid():
             count = form.cleaned_data.get('count')

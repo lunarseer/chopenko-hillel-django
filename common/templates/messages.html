@@ -1,12 +1,14 @@
 {% if messages %}
-<div id="backend_messages" class="card mb-1">
-    <div class="card-header mb-1">
+<div id="backend_messages">
+    <!-- <div class="card-header mb-1">
         Messages
     </div>
-    <div class="card-body mb-1">
+    <div class="card-body mb-1"> -->
     {% for message in messages %}
-        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+        <div class="alert alert-{{ message.tags }}">
+            {{ message|safe }}
+        </div>
     {% endfor %}
-    </div>
+    <!-- </div> -->
 </div>
 {% endif %}

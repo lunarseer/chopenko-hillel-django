@@ -8,7 +8,11 @@
         width: 100%;
     }
 </style>
-{% include "header.html" %}
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+    {% include "header.html" %}
+</head>
+
 <body>
     <div id="content" class="container">
         <style type="text/css">
@@ -60,7 +64,7 @@
             }
         </style>
         <div>
-            <div id="backend_messages" style="height: 30px">
+            <!-- <div id="backend_messages" style="height: 60px">
                 <div class="center">
                     {% if messages %}
                     {% for message in messages %}
@@ -68,11 +72,11 @@
                     {% endfor %}
                     {% endif %}
                 </div>
-            </div>
+            </div> -->
             <!-- Need to fix include -->
-            <!-- {% include "messages.html" %} -->
             {% include "sidebar.html" %}
             {% block content %} {% endblock %}
+            {% include "messages.html" %}
         </div>
     </div>
 </body>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <form class="card" action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <div class="card-header mb-3">
+            Current User {{ user }}
+        </div>
+        <div class="card-body mb-3">
+            <div class="container center">
+                <a href="{% url 'password_change' %}" style="width: 200px;" class="btn btn-secondary">Change Password</a>
+                <button class="btn btn-primary"  style="width: 200px;" type="submit">Logout</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
